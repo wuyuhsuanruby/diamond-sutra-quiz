@@ -76,13 +76,13 @@
           </div>
         </div>
 
-        <!-- 模式與題型過濾 -->
-        <div class="flex flex-wrap gap-2 text-xs">
-          <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn active-filter">全部題型</button>
-          <button onclick="setFilter('tf')" id="btn-filter-tf" class="filter-btn">僅是非題</button>
-          <button onclick="setFilter('choice')" id="btn-filter-choice" class="filter-btn">僅單選題</button>
-          <button onclick="setFilter('wrong')" id="btn-filter-wrong" class="filter-btn text-rose-600 dark:text-rose-400">錯題複習 (<span id="wrong-count">0</span>)</button>
-          <button onclick="toggleRandomMode()" id="btn-random-mode" class="filter-btn ml-auto"><i class="fa-solid fa-shuffle mr-1"></i>隨機排序</button>
+        <!-- 模式與題型過濾 (修復按鈕樣式) -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 font-medium transition">全部題型</button>
+          <button onclick="setFilter('tf')" id="btn-filter-tf" class="filter-btn px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 font-medium transition">僅是非題</button>
+          <button onclick="setFilter('choice')" id="btn-filter-choice" class="filter-btn px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 font-medium transition">僅單選題</button>
+          <button onclick="setFilter('wrong')" id="btn-filter-wrong" class="filter-btn px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 font-medium transition text-rose-600 dark:text-rose-400">錯題複習 (<span id="wrong-count">0</span>)</button>
+          <button onclick="toggleRandomMode()" id="btn-random-mode" class="filter-btn px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 font-medium transition ml-auto"><i class="fa-solid fa-shuffle mr-1"></i>隨機排序</button>
         </div>
 
         <!-- 進度條 -->
@@ -128,36 +128,22 @@
   </footer>
 
   <style>
-    .filter-btn {
-      padding: 0.35rem 0.75rem;
-      border-radius: 0.5rem;
-      background-color: rgba(241, 245, 249, 0.8);
-      color: #475569;
-      transition: all 0.2s;
-    }
-    .dark .filter-btn {
-      background-color: rgba(51, 65, 85, 0.8);
-      color: #cbd5e1;
-    }
-    .filter-btn:hover {
-      background-color: #e2e8f0;
-    }
-    .dark .filter-btn:hover {
-      background-color: #475569;
-    }
     .active-filter {
       background-color: #b45309 !important;
+      border-color: #b45309 !important;
       color: #ffffff !important;
-      font-weight: 600;
+      font-weight: 600 !important;
     }
     .dark .active-filter {
       background-color: #d97706 !important;
+      border-color: #d97706 !important;
+      color: #ffffff !important;
     }
   </style>
 
   <script>
     // ==========================================
-    // 題庫資料結構（未來有新期別時，直接在此陣列新增）
+    // 題庫資料結構
     // ==========================================
     const topicsData = [
       {
@@ -166,25 +152,25 @@
         description: "包含金剛經總說、鳩摩羅什法師譯經歷史、以及第一分法會因由分相關練習題。",
         questions: [
           // 是非題
-          { id: 1, type: "tf", category: "第一部分：是非題", question: "1. 六祖大師認為，《金剛經》乃眾生性中本有；不自見者，但讀誦文字。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "六祖大師開示自性本具般若。" },
-          { id: 2, type: "tf", category: "第一部分：是非題", question: "2. 惠能大師認為，若能讀懂《金剛經》，方信一切諸佛從此經出。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
-          { id: 3, type: "tf", category: "第一部分：是非題", question: "3. 受持《金剛經》的目的在於，了然自見清淨佛心，同見金性中礦，以智慧火熔鍊，礦去金存。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 1, type: "tf", category: "第一部分：是非題", question: "1. 六祖大師認為，《金剛經》乃眾生性中本有；不自見者，但讀誦文字。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "六祖大師開示須明了自性。" },
+          { id: 2, type: "tf", category: "第一部分：是非題", question: "2. 惠能大師認為，若能讀懂《金剛經》，方信一切諸佛從此經出。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "目的要悟理見性。" },
+          { id: 3, type: "tf", category: "第一部分：是非題", question: "3. 受持《金剛經》的目的在於，了然自見清淨佛心，同見金性中礦，以智慧火熔鍊，礦去金存。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "礦中金性。" },
           { id: 4, type: "tf", category: "第一部分：是非題", question: "4. 惟覺安公老和尚開示「誦經有卷無字經」，其中的「無字經」是指沒有文字的一部經。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "「無字經」指本具之覺性，非指實體無文字之經書。" },
           { id: 5, type: "tf", category: "第一部分：是非題", question: "5. 《金剛經》前後傳入中國，歷史上現存共有五種譯本。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "歷史現存共有六種譯本。" },
           { id: 6, type: "tf", category: "第一部分：是非題", question: "6. 《金剛經》的全名為《金剛般若波羅蜜經》，這個經名是由須菩提尊者自行取名並請佛認可的。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "經名為佛陀所宣說指示。" },
-          { id: 7, type: "tf", category: "第一部分：是非題", question: "7. 《金剛經》的內文，乃《大品般若波羅蜜經》中的〈能斷金剛分〉。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 7, type: "tf", category: "第一部分：是非題", question: "7. 《金剛經》的內文，乃《大般若波羅蜜經》中的〈能斷金剛分〉。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
           { id: 8, type: "tf", category: "第一部分：是非題", question: "8. 「金剛」在佛法中是用來比喻般若智慧，其體最堅、其用最利、其相最明。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確：體堅、用利、相明。" },
-          { id: 9, type: "tf", category: "第一部分：是非題", question: "9. 六祖大師認為「智是慧用，慧是智體」，體若有慧則用智不愚。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 9, type: "tf", category: "第一部分：是非題", question: "9. 六祖大師認為「智是慧用，慧是智體」，體若有慧則用智不愚。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "智是慧體，慧是智用。" },
           { id: 10, type: "tf", category: "第一部分：是非題", question: "10. 梵語「波羅蜜」譯為中文是「到彼岸」，離生滅之義。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
-          { id: 11, type: "tf", category: "第一部分：是非題", question: "11. 「金剛」即是現代所講的「鑽石」。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "金剛為比喻，非僅指現代之鑽石。" },
+          { id: 11, type: "tf", category: "第一部分：是非題", question: "11. 「金剛」即是現代所講的「鑽石」。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "真正的金剛保並不存於人間，而鑽石僅是人間比較相近能做為比喻之物。" },
           { id: 12, type: "tf", category: "第一部分：是非題", question: "12. 文字般若，能詮實相本體與觀照妙用。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
-          { id: 13, type: "tf", category: "第一部分：翻譯與譯者", question: "13. 梵語「般若」，在翻譯時不翻成華語，只以音譯，是為令眾生善。謂般若二字，聞之者生信念，以如譯為智慧，則生輕淺之意故也。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確（五不翻中的尊重不翻）。" },
-          { id: 14, type: "tf", category: "第一部分：是非題", question: "14. 菩薩摩訶薩提心金剛，乃從大悲救護眾生金剛處、一切智智殊勝境界金剛處，及眾生善根處生。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 13, type: "tf", category: "第一部分：翻譯與譯者", question: "13. 梵語「般若」，在翻譯時不翻成華語，只以音譯，是為令眾生善。謂般若二字，聞之者生信念，以如譯為智慧，則生輕淺之意故也。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確（五不翻中的令生善而不翻）。" },
+          { id: 14, type: "tf", category: "第一部分：是非題", question: "14. 菩薩摩訶薩提心金剛，乃從大悲救護眾生金剛處、一切智智殊勝境界金剛處，及眾生善根處生。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "非餘眾生善根處生。" },
           { id: 15, type: "tf", category: "第一部分：翻譯與譯者", question: "15. 鳩摩羅什法師七歲隨母出家，遍遊西域，總貫群籍，最善於大乘佛法。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
           { id: 16, type: "tf", category: "第一部分：翻譯與譯者", question: "16. 前秦君主苻堅派遣呂光伐龜茲獲鳩摩羅什法師，留於涼州十六、七年。這段時期，什師雖無法弘法因緣甚而不受尊重，但仍藉此因緣深刻熟稔中土的民情與語言文字，為日後譯經奠定深厚基礎。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
-          { id: 17, type: "tf", category: "第一部分：翻譯與譯者", question: "17. 鳩摩羅什法師入長安後，在西明閣及逍遙園譯經，宣譯凡三百八十餘卷，為中國四大譯經師之一。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 17, type: "tf", category: "第一部分：翻譯與譯者", question: "17. 鳩摩羅什法師入長安後，在西明閣及逍遙園譯經，宣譯凡三百八十餘卷，為中國四大譯經師之一。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "四大譯經師:鳩摩羅什、真諦、玄奘、義淨。" },
           { id: 18, type: "tf", category: "第一部分：翻譯與譯者", question: "18. 僧肇與道生皆為鳩摩羅什法師的著名弟子。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
-          { id: 19, type: "tf", category: "第一部分：翻譯與譯者", question: "19. 據資料記載，鳩摩羅什法師智慧過人，每日可背誦五百偈。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "據記載為每日能誦三萬二千言（千偈）。" },
+          { id: 19, type: "tf", category: "第一部分：翻譯與譯者", question: "19. 據資料記載，鳩摩羅什法師智慧過人，每日可背誦五百偈。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "據記載為日誦千偈。" },
           { id: 20, type: "tf", category: "第一部分：第一分", question: "20. 《金剛經》第一分「法會因由分」在整體經文科判上屬於「序分」。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
           { id: 21, type: "tf", category: "第一部分：第一分", question: "21. 科判中的「序分」可進一步細分為「證信序」與「發起序」兩大部分。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
           { id: 22, type: "tf", category: "第一部分：第一分", question: "22. 每部經典都具足「六成就」，說明佛陀說法因六種因緣具足而說，故又稱「發起序」，是為「通序」。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "具足六成就者稱為「證信序」（通序），非發起序。" },
@@ -209,8 +195,8 @@
           { id: 39, type: "choice", category: "第二部分：單選題", question: "9. 惟覺老和尚指出，《金剛經》所說的「無為法」具體顯現在何處？", options: ["❶ 深山石洞的禪定", "❷ 師父說法、大眾聽法的這個覺性，一念不生", "❸ 天堂的快樂境界", "❹ 經書紙張字裡行間"], answer: 1, explanation: "顯現於說法聽法的覺性、一念不生之處。" },
           { id: 40, type: "choice", category: "第二部分：單選題", question: "10. 弟子多次請惟覺老和尚開講《金剛經》，老和尚如何回答？", options: ["❶ 「等時機成熟再講」", "❷ 「《金剛經》太深奧，無法開講」", "❸ 「我每天都在說金剛經」", "❹ 「請大家自行閱讀講義」"], answer: 2, explanation: "老和尚回答：「我每天都在說金剛經」。" },
           { id: 41, type: "choice", category: "第二部分：單選題", question: "11. 《金剛經》前後傳入中國幾種譯本中，今日流通最廣的是哪一位大師的譯本？", options: ["❶ 後秦 鳩摩羅什", "❷ 北魏 菩提流支", "❸ 唐 玄奘", "❹ 唐 義淨"], answer: 0, explanation: "流通最廣者為後秦鳩摩羅什大師譯本。" },
-          { id: 42, type: "choice", category: "第二部分：單選題", question: "12. 以下何者正確？", options: ["❶ 提出將佛經科判劃分為「序分、正宗分、流通分」三大段落的是智者大師", "❷ 傳統上將《金剛經》劃分為「三十二分」並各自定名的歷史人物是梁昭明太子", "❸ 鳩摩羅什法師圓寂後火化，全身壞盡，唯獨舌頭「不灰、紅如蓮花」，是因所譯經文符合佛遺寄之意", "❹ 以上皆是"], answer: 3, explanation: "選項❶❷❸皆正確（選項❶道安大師劃分三分，此處依題目設計選❹）。" },
-          { id: 43, type: "choice", category: "第二部分：單選題", question: "13. 通理大師將《金剛經》依次第淺深分成四分，以下何者錯誤？", options: ["❶ 第一略明降住生信分", "❷ 第二正宗分", "❸ 第三究竟降住起修分", "❹ 第四決定降住成證分"], answer: 1, explanation: "第二分應為「正信起修分」或對應名稱，非直接稱正宗分。" },
+          { id: 42, type: "choice", category: "第二部分：單選題", question: "12. 以下何者正確？", options: ["❶ 提出將佛經科判劃分為「序分、正宗分、流通分」三大段落的是道安法師", "❷ 傳統上將《金剛經》劃分為「三十二分」並各自定名的歷史人物是梁昭明太子", "❸ 鳩摩羅什法師圓寂後火化，全身壞盡，唯獨舌頭「不灰、紅如蓮花」，是因所譯經文符合佛遺寄之意", "❹ 以上皆是"], answer: 3, explanation: "選項❶❷❸皆正確（選項❶道安大師劃分三分，此處依題目設計選❹）。" },
+          { id: 43, type: "choice", category: "第二部分：單選題", question: "13. 通理大師將《金剛經》依次第淺深分成四分，以下何者錯誤？", options: ["❶ 第一略明降住生信分", "❷ 第二正宗分", "❸ 第三究竟降住起修分", "❹ 第四決定降住成證分"], answer: 1, explanation: "第二分應為推廣降住開解分。" },
           { id: 44, type: "choice", category: "第二部分：單選題", question: "14. 《金剛經》是佛陀在何處因須菩提尊者請法而宣說的？", options: ["❶ 靈鷲山", "❷ 舍衛國", "❸ 鹿野苑", "❹ 毘舍離"], answer: 1, explanation: "於舍衛國祇樹給孤獨園。" },
           { id: 45, type: "choice", category: "第二部分：單選題", question: "15. 有關佛制僧團中的「乞食」下列何者為非？", options: ["❶ 乞食又稱分衛，意思是乞食分施僧尼，衛護令修道業", "❷ 法師入眾乞食時，應著大衣，即九衣", "❸ 乞食一法是為了磨練法師的耐力", "❹ 乞食時所持的鉢，華語翻譯為應量器"], answer: 2, explanation: "乞食非僅為了磨練耐力，主在破除我慢、給予眾生種福田。" },
           { id: 46, type: "choice", category: "第二部分：單選題", question: "16. 關於文字般若，以下何者為非？", options: ["❶ 能詮釋般若智慧的語言文字", "❷ 我們要尊重經典文字，因為都是十方諸佛的法身舍利", "❸ 只要把金剛經背下來，就是文字般若", "❹ 文字般若，其相最明"], answer: 2, explanation: "僅死背經典而未理解契入，不能稱具足文字般若之實義。" },
@@ -222,7 +208,7 @@
           { id: 52, type: "choice", category: "第二部分：單選題", question: "22. 下列何部論著「非」由鳩摩羅什法師所翻譯？", options: ["❶ 《大智度論》", "❷ 《妙法蓮華經》", "❸ 《阿彌陀經》", "❹ 《藥師經》"], answer: 3, explanation: "《藥師經》主要由玄奘大師等翻譯，非什師所譯。" },
           { id: 53, type: "choice", category: "第二部分：單選題", question: "23. 經文「如是我聞。一時，佛在舍衛國祇樹給孤獨園，與大比丘眾千二百五十人俱」屬於：", options: ["❶ 發起序", "❷ 證信序", "❸ 別序", "❹ 正宗分"], answer: 1, explanation: "具足六成就，屬於證信序。" },
           { id: 54, type: "choice", category: "第二部分：單選題", question: "24. 「如是」作為「信順之詞」，是指哪一位尊者信順釋迦牟尼佛所說而結集經藏？", options: ["❶ 須菩提尊者", "❷ 大迦葉尊者", "❸ 阿難尊者", "❹ 舍利弗尊者"], answer: 2, explanation: "指阿難尊者信順佛所宣說。" },
-          { id: 55, type: "choice", category: "第二部分：單選題", question: "25. 作為「顯理之詞」，「如是」總顯真如實相妙理，此處具體顯現了什麼理？", options: ["❶ 三般若之理", "❷ 四聖諦之理", "❸ 十二因緣之理", "❹ 五蘊皆空之理"], answer: 1, explanation: "顯現實相、觀照、文字三般若之理。" },
+          { id: 55, type: "choice", category: "第二部分：單選題", question: "25. 作為「顯理之詞」，「如是」總顯真如實相妙理，此處具體顯現了什麼理？", options: ["❶ 三般若之理", "❷ 四聖諦之理", "❸ 十二因緣之理", "❹ 五蘊皆空之理"], answer: 0, explanation: "顯現實相、觀照、文字三般若之理。" },
           { id: 56, type: "choice", category: "第二部分：單選題", question: "26. 「如是我聞」中的「如」，是指哪兩種般若理智如如、不二？", options: ["❶ 觀照般若與實相般若", "❷ 文字般若與實相般若", "❸ 方便般若與觀照般若", "❹ 境界般若與文字般若"], answer: 0, explanation: "觀照智與實相理，理智不二。" },
           { id: 57, type: "choice", category: "第二部分：單選題", question: "27. 「如是」中的「是」者「無非」，對應的是三般若中的哪一種？", options: ["❶ 實相般若", "❷ 觀照般若", "❸ 文字般若", "❹ 離相般若"], answer: 2, explanation: "對應文字般若。" },
           { id: 58, type: "choice", category: "第二部分：單選題", question: "28. 有關「如是我聞」，下列何者錯誤？", options: ["❶ 如是我聞，是世尊回答大迦葉尊者之問", "❷ 阿難相好，陞座眾疑：疑釋迦佛再來？疑阿難成佛？疑他方佛來？至阿難高唱「如是我聞」，乃知阿難是承佛加被，頓息眾疑", "❸ 集結經典時，阿難云如是之法，乃我從佛所聞，言非自作，故息爭論", "❹ 如是我聞建立之因，是遵照、秉承佛陀的付囑"], answer: 0, explanation: "「如是我聞」是世尊回答阿難尊者臨終四問之一，非大迦葉尊者。" },
@@ -235,16 +221,6 @@
           { id: 65, type: "choice", category: "第二部分：單選題", question: "35. 發起序中「護念付囑善應知」，說明佛陀：", options: ["❶ 以口頭語言正式宣付遺教", "❷ 以身教細行默默護念付囑大眾", "❸ 交付衣鉢給特定弟子", "❹ 囑咐弟子建造佛塔"], answer: 1, explanation: "以身教細行默默護念付囑大眾。" }
         ]
       }
-      /* 
-      // 未來有第 2 期時，直接在這裡複製加入即可：
-      ,
-      {
-        id: "phase-2",
-        title: "第二期：【第二分至第五分】",
-        description: "包含善現啟請分、正信希有分、大乘正宗分、妙行無住分等內容。",
-        questions: [ ... ]
-      }
-      */
     ];
 
     // ==========================================
@@ -254,14 +230,11 @@
     let rawQuestions = [];
     let filteredQuestions = [];
     let currentIndex = 0;
-    let userAnswers = {}; // { qId: selectedOptionIndex }
+    let userAnswers = {}; 
     let wrongQuestionIds = new Set();
-    let currentFilter = 'all'; // 'all', 'tf', 'choice', 'wrong'
+    let currentFilter = 'all'; 
     let isRandom = false;
 
-    // ==========================================
-    // 初始化與畫面切換
-    // ==========================================
     window.addEventListener('DOMContentLoaded', () => {
       renderTopicCards();
       showTopicSelection();
@@ -327,9 +300,6 @@
       applyFilterAndRender();
     }
 
-    // ==========================================
-    // 篩選與測驗邏輯
-    // ==========================================
     function applyFilterAndRender() {
       let list = [...rawQuestions];
 
@@ -375,6 +345,11 @@
     function updateFilterButtonsUI() {
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
       document.getElementById(`btn-filter-${currentFilter}`).classList.add('active-filter');
+      if (isRandom) {
+        document.getElementById('btn-random-mode').classList.add('active-filter');
+      } else {
+        document.getElementById('btn-random-mode').classList.remove('active-filter');
+      }
       document.getElementById('wrong-count').innerText = wrongQuestionIds.size;
     }
 
@@ -421,13 +396,10 @@
           }
         }
 
-        btn.innerHTML = `
-          <span class="inline-block mt-0.5">${optText}</span>
-        `;
+        btn.innerHTML = `<span class="inline-block mt-0.5">${optText}</span>`;
         container.appendChild(btn);
       });
 
-      // 解析顯示
       if (answered) {
         expBox.classList.remove('hidden');
         const isCorrect = selectedOption === q.answer;
@@ -446,7 +418,6 @@
         expBox.classList.add('hidden');
       }
 
-      // 控制按鈕狀態
       document.getElementById('btn-prev').disabled = currentIndex === 0;
       document.getElementById('btn-next').disabled = currentIndex === filteredQuestions.length - 1;
 
@@ -496,7 +467,6 @@
       document.getElementById('stat-count').innerText = `${filteredQuestions.length} 題`;
       document.getElementById('wrong-count').innerText = wrongQuestionIds.size;
 
-      // 進度條
       const total = filteredQuestions.length;
       const progress = total > 0 ? ((currentIndex + 1) / total) * 100 : 0;
       document.getElementById('progress-bar').style.width = `${progress}%`;
