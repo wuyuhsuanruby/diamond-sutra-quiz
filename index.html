@@ -1,792 +1,516 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="h-full">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大乘解行研經班《金剛經》線上刷題系統</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        amber: {
-                            50: '#fffbeb',
-                            100: '#fef3c7',
-                            200: '#fde68a',
-                            600: '#d97706',
-                            700: '#b45309',
-                            800: '#92400e',
-                            900: '#78350f',
-                        },
-                        sandalwood: {
-                            light: '#fcf8f2',
-                            dark: '#1c1917',
-                            cardLight: '#ffffff',
-                            cardDark: '#262626',
-                            accent: '#c05621'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'sans-serif'],
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大乘解行研經班 線上題庫系統</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            amber: {
+              50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
+              400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
+              800: '#92400e', 900: '#78350f',
             }
+          }
         }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Smooth page transition styles */
-        .fade-in {
-            animation: fadeIn 0.25s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+      }
+    }
+  </script>
 </head>
-<body class="bg-sandalwood-light dark:bg-sandalwood-dark text-stone-800 dark:text-stone-100 min-h-full flex flex-col font-sans transition-colors duration-200">
+<body class="bg-amber-50/40 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-full flex flex-col font-sans transition-colors duration-200">
 
-    <!-- Header Navigation -->
-    <header class="bg-amber-800 text-amber-50 shadow-md sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showHome()">
-                <div class="bg-amber-600 p-2 rounded-lg text-amber-100 shadow-inner">
-                    <i class="fa-solid me-1 fa-book-open text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg leading-tight">大乘解行研經班</h1>
-                    <p class="text-xs text-amber-200 opacity-90">金北一北二班練習題【總說、釋經翻譯者、第一分】</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center space-x-2">
-                <!-- Wrong Question Counter Quick Badge -->
-                <button onclick="app.startReviewMode()" id="wrong-count-btn" class="hidden text-xs bg-red-800/80 hover:bg-red-700 text-red-100 px-3 py-1.5 rounded-full flex items-center space-x-1.5 transition">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span>錯題庫 (<span id="global-wrong-count">0</span>)</span>
-                </button>
-
-                <!-- Dark Mode Toggle -->
-                <button id="theme-toggle" onclick="app.toggleTheme()" class="p-2 rounded-lg text-amber-100 hover:bg-amber-700/50 transition" title="切換深色/淺色模式">
-                    <i class="fa-solid fa-moon text-lg" id="theme-toggle-dark-icon"></i>
-                    <i class="fa-solid fa-sun text-lg hidden" id="theme-toggle-light-icon"></i>
-                </button>
-            </div>
+  <!-- 頂部導覽列 -->
+  <header class="bg-amber-800 text-amber-50 shadow-md sticky top-0 z-50 dark:bg-slate-800 dark:border-b dark:border-slate-700">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="showTopicSelection()">
+        <i class="fa-solid fa-book-open text-amber-300 text-xl"></i>
+        <div>
+          <h1 class="font-bold text-lg leading-tight">大乘解行研經班</h1>
+          <p class="text-xs text-amber-200/80" id="current-topic-badge">線上題庫練習系統</p>
         </div>
-    </header>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button id="btn-back-topics" onclick="showTopicSelection()" class="hidden text-xs bg-amber-700 hover:bg-amber-600 dark:bg-slate-700 dark:hover:bg-slate-600 text-amber-100 px-3 py-1.5 rounded-lg border border-amber-600/50 transition">
+          <i class="fa-solid fa-th-large mr-1"></i> 切換主題
+        </button>
+        <button onclick="toggleDarkMode()" class="p-2 rounded-lg text-amber-200 hover:bg-amber-700 dark:hover:bg-slate-700 transition" title="切換深色/淺色模式">
+          <i id="theme-icon" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <!-- Main Content Container -->
-    <main class="flex-grow max-w-4xl w-full mx-auto p-4 md:p-6">
+  <!-- 主內容區 -->
+  <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6">
 
-        <!-- SCREEN 1: Home / Mode Selection Screen -->
-        <section id="screen-home" class="fade-in space-y-6">
-            <!-- Welcome Banner -->
-            <div class="bg-gradient-to-r from-amber-700 to-amber-900 text-white rounded-2xl p-6 md:p-8 shadow-lg relative overflow-hidden">
-                <div class="relative z-10 space-y-2">
-                    <span class="inline-block bg-amber-600/60 text-amber-100 text-xs px-3 py-1 rounded-full border border-amber-400/30 font-medium">線上互動刷題系統</span>
-                    <h2 class="text-2xl md:text-3xl font-bold">精進研讀 · 般若智慧</h2>
-                    <p class="text-amber-100 text-sm md:text-base max-w-2xl pt-1">
-                        本測驗共包含 65 題精選題目（30 題是非題、35 題單選題），幫助您鞏固金剛經總說、譯者與第一分之學習成果。
-                    </p>
-                </div>
-                <i class="fa-solid fa-dharmachakra absolute -right-6 -bottom-10 text-9xl text-amber-600/20 pointer-events-none"></i>
+    <!-- 1. 期別/主題選擇頁面 (Default View) -->
+    <section id="view-topic-select" class="space-y-6">
+      <div class="text-center py-6">
+        <h2 class="text-2xl font-bold text-amber-900 dark:text-amber-400 mb-2">請選擇研讀單元／期別</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400">點擊下方主題即可進入專屬練習題庫</p>
+      </div>
+
+      <div id="topic-cards-container" class="grid gap-4 sm:grid-cols-2">
+        <!-- 動態渲染各期別卡片 -->
+      </div>
+    </section>
+
+    <!-- 2. 測驗/刷題頁面 -->
+    <section id="view-quiz" class="hidden space-y-6">
+      <!-- 頂部控制面板：類別篩選與統計 -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-amber-100 dark:border-slate-700 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-700">
+          <div class="flex items-center space-x-2">
+            <span id="active-topic-title" class="font-bold text-amber-800 dark:text-amber-400"></span>
+            <span id="stat-count" class="text-xs px-2 py-0.5 rounded-full bg-amber-100 dark:bg-slate-700 text-amber-800 dark:text-amber-300">0 題</span>
+          </div>
+          <div class="flex items-center space-x-3 text-xs font-medium">
+            <span class="text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check"></i> 正確: <span id="score-correct">0</span></span>
+            <span class="text-rose-500 dark:text-rose-400"><i class="fa-solid fa-circle-xmark"></i> 錯誤: <span id="score-wrong">0</span></span>
+          </div>
+        </div>
+
+        <!-- 模式與題型過濾 -->
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn active-filter">全部題型</button>
+          <button onclick="setFilter('tf')" id="btn-filter-tf" class="filter-btn">僅是非題</button>
+          <button onclick="setFilter('choice')" id="btn-filter-choice" class="filter-btn">僅單選題</button>
+          <button onclick="setFilter('wrong')" id="btn-filter-wrong" class="filter-btn text-rose-600 dark:text-rose-400">錯題複習 (<span id="wrong-count">0</span>)</button>
+          <button onclick="toggleRandomMode()" id="btn-random-mode" class="filter-btn ml-auto"><i class="fa-solid fa-shuffle mr-1"></i>隨機排序</button>
+        </div>
+
+        <!-- 進度條 -->
+        <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-amber-600 dark:bg-amber-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- 題目卡片 -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-amber-100 dark:border-slate-700 space-y-6 transition-all">
+        <div class="flex justify-between items-start gap-4">
+          <span id="question-category" class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-50 text-amber-800 dark:bg-slate-700 dark:text-amber-300"></span>
+          <span id="question-number" class="text-xs text-slate-400 font-mono"></span>
+        </div>
+
+        <div id="question-text" class="text-lg font-medium leading-relaxed text-slate-800 dark:text-slate-100"></div>
+
+        <!-- 選項列表 -->
+        <div id="options-container" class="space-y-3"></div>
+
+        <!-- 解答說明區（答題後顯示） -->
+        <div id="explanation-box" class="hidden p-4 rounded-lg bg-amber-50/80 dark:bg-slate-700/50 border border-amber-200 dark:border-slate-600 space-y-1">
+          <div class="flex items-center space-x-2 font-bold text-sm" id="result-status"></div>
+          <div id="explanation-text" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></div>
+        </div>
+      </div>
+
+      <!-- 底部切換按鈕 -->
+      <div class="flex items-center justify-between pt-2">
+        <button onclick="prevQuestion()" id="btn-prev" class="px-4 py-2 text-sm rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed">
+          <i class="fa-solid fa-arrow-left mr-1"></i> 上一題
+        </button>
+        <button onclick="nextQuestion()" id="btn-next" class="px-5 py-2 text-sm font-semibold rounded-lg bg-amber-700 hover:bg-amber-800 text-white dark:bg-amber-600 dark:hover:bg-amber-500 transition shadow-sm">
+          下一題 <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-auto py-4 text-center text-xs text-slate-400 border-t border-slate-200 dark:border-slate-800">
+    大乘解行研經班 線上自主刷題系統
+  </footer>
+
+  <style>
+    .filter-btn {
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      background-color: rgba(241, 245, 249, 0.8);
+      color: #475569;
+      transition: all 0.2s;
+    }
+    .dark .filter-btn {
+      background-color: rgba(51, 65, 85, 0.8);
+      color: #cbd5e1;
+    }
+    .filter-btn:hover {
+      background-color: #e2e8f0;
+    }
+    .dark .filter-btn:hover {
+      background-color: #475569;
+    }
+    .active-filter {
+      background-color: #b45309 !important;
+      color: #ffffff !important;
+      font-weight: 600;
+    }
+    .dark .active-filter {
+      background-color: #d97706 !important;
+    }
+  </style>
+
+  <script>
+    // ==========================================
+    // 題庫資料結構（未來有新期別時，直接在此陣列新增）
+    // ==========================================
+    const topicsData = [
+      {
+        id: "phase-1",
+        title: "第一期：【總說、釋經翻譯者、第一分】",
+        description: "包含金剛經總說、鳩摩羅什法師譯經歷史、以及第一分法會因由分相關練習題。",
+        questions: [
+          // 是非題
+          { id: 1, type: "tf", category: "第一部分：是非題", question: "1. 六祖大師認為，《金剛經》乃眾生性中本有；不自見者，但讀誦文字。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "六祖大師開示自性本具般若。" },
+          { id: 2, type: "tf", category: "第一部分：是非題", question: "2. 惠能大師認為，若能讀懂《金剛經》，方信一切諸佛從此經出。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 3, type: "tf", category: "第一部分：是非題", question: "3. 受持《金剛經》的目的在於，了然自見清淨佛心，同見金性中礦，以智慧火熔鍊，礦去金存。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 4, type: "tf", category: "第一部分：是非題", question: "4. 惟覺安公老和尚開示「誦經有卷無字經」，其中的「無字經」是指沒有文字的一部經。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "「無字經」指本具之覺性，非指實體無文字之經書。" },
+          { id: 5, type: "tf", category: "第一部分：是非題", question: "5. 《金剛經》前後傳入中國，歷史上現存共有五種譯本。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "歷史現存共有六種譯本。" },
+          { id: 6, type: "tf", category: "第一部分：是非題", question: "6. 《金剛經》的全名為《金剛般若波羅蜜經》，這個經名是由須菩提尊者自行取名並請佛認可的。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "經名為佛陀所宣說指示。" },
+          { id: 7, type: "tf", category: "第一部分：是非題", question: "7. 《金剛經》的內文，乃《大品般若波羅蜜經》中的〈能斷金剛分〉。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 8, type: "tf", category: "第一部分：是非題", question: "8. 「金剛」在佛法中是用來比喻般若智慧，其體最堅、其用最利、其相最明。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確：體堅、用利、相明。" },
+          { id: 9, type: "tf", category: "第一部分：是非題", question: "9. 六祖大師認為「智是慧用，慧是智體」，體若有慧則用智不愚。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 10, type: "tf", category: "第一部分：是非題", question: "10. 梵語「波羅蜜」譯為中文是「到彼岸」，離生滅之義。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 11, type: "tf", category: "第一部分：是非題", question: "11. 「金剛」即是現代所講的「鑽石」。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "金剛為比喻，非僅指現代之鑽石。" },
+          { id: 12, type: "tf", category: "第一部分：是非題", question: "12. 文字般若，能詮實相本體與觀照妙用。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 13, type: "tf", category: "第一部分：翻譯與譯者", question: "13. 梵語「般若」，在翻譯時不翻成華語，只以音譯，是為令眾生善。謂般若二字，聞之者生信念，以如譯為智慧，則生輕淺之意故也。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確（五不翻中的尊重不翻）。" },
+          { id: 14, type: "tf", category: "第一部分：是非題", question: "14. 菩薩摩訶薩提心金剛，乃從大悲救護眾生金剛處、一切智智殊勝境界金剛處，及眾生善根處生。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "題目敘述為非。" },
+          { id: 15, type: "tf", category: "第一部分：翻譯與譯者", question: "15. 鳩摩羅什法師七歲隨母出家，遍遊西域，總貫群籍，最善於大乘佛法。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 16, type: "tf", category: "第一部分：翻譯與譯者", question: "16. 前秦君主苻堅派遣呂光伐龜茲獲鳩摩羅什法師，留於涼州十六、七年。這段時期，什師雖無法弘法因緣甚而不受尊重，但仍藉此因緣深刻熟稔中土的民情與語言文字，為日後譯經奠定深厚基礎。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 17, type: "tf", category: "第一部分：翻譯與譯者", question: "17. 鳩摩羅什法師入長安後，在西明閣及逍遙園譯經，宣譯凡三百八十餘卷，為中國四大譯經師之一。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 18, type: "tf", category: "第一部分：翻譯與譯者", question: "18. 僧肇與道生皆為鳩摩羅什法師的著名弟子。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 19, type: "tf", category: "第一部分：翻譯與譯者", question: "19. 據資料記載，鳩摩羅什法師智慧過人，每日可背誦五百偈。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "據記載為每日能誦三萬二千言（千偈）。" },
+          { id: 20, type: "tf", category: "第一部分：第一分", question: "20. 《金剛經》第一分「法會因由分」在整體經文科判上屬於「序分」。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 21, type: "tf", category: "第一部分：第一分", question: "21. 科判中的「序分」可進一步細分為「證信序」與「發起序」兩大部分。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 22, type: "tf", category: "第一部分：第一分", question: "22. 每部經典都具足「六成就」，說明佛陀說法因六種因緣具足而說，故又稱「發起序」，是為「通序」。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "具足六成就者稱為「證信序」（通序），非發起序。" },
+          { id: 23, type: "tf", category: "第一部分：第一分", question: "23. 經文「如是我聞」中的「如是」，若作為「指法之詞」，在此處是指《金剛經》這部典籍。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 24, type: "tf", category: "第一部分：第一分", question: "24. 「經」梵語「修多羅」，原意為「線」，引申有「貫、攝、常、法」之義。華譯為「契經」，意指其內文契理契機。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 25, type: "tf", category: "第一部分：第一分", question: "25. 始覺智慧是由本覺理體啟發出來的，始覺智合乎本覺理、如如不動，這就稱為「如」。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 26, type: "tf", category: "第一部分：第一分", question: "26. 《金剛經》的「發起序」中記載世尊於食時「著衣持鉢，入舍衛大城乞食」。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 27, type: "tf", category: "第一部分：第一分", question: "27. 《金剛經》中，世尊乞食完畢還至本處後，接著進行的動作順序為：飯食訖、洗足已、收衣鉢、敷座而坐。", options: ["○ 正確", "X 錯誤"], answer: 1, explanation: "正確順序應為：飯食訖、收衣鉢、洗足已、敷座而坐。" },
+          { id: 28, type: "tf", category: "第一部分：第一分", question: "28. 「一一行中見實相，護念付囑善應知」說明佛陀穿衣喫飯、洗足敷座等細行，皆是在默默護念與付囑弟子。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 29, type: "tf", category: "第一部分：第一分", question: "29. 《金剛經》中佛陀敷座而坐，乃結跏趺坐，此是坐中最勝，見者歡喜、身得安穩、心得端直故。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+          { id: 30, type: "tf", category: "第一部分：第一分", question: "30. 「法會因由分第一」展現了佛法「事理不二」的深刻內涵，說明日用尋常即是般若妙理的顯發。", options: ["○ 正確", "X 錯誤"], answer: 0, explanation: "正確。" },
+
+          // 單選題
+          { id: 31, type: "choice", category: "第二部分：單選題", question: "1. 六祖大師於《金剛經解義．經序》中說明《金剛經》的宗體用，下列何者正確？", options: ["❶ 無相為體，無住為宗，妙有為用", "❷ 無相為宗，無住為體，妙有為用", "❸ 妙有為宗，無相為體，無住為用", "❹ 無住為宗，妙有為體，無相為用"], answer: 1, explanation: "六祖大師以「無相為宗，無住為體，妙有為用」。" },
+          { id: 32, type: "choice", category: "第二部分：單選題", question: "2. 六祖大師指出，達摩祖師西來傳《金剛經》之意的根本目的是：", options: ["❶ 了解聖人之教", "❷ 令人悟理見性", "❸ 研析經文字句", "❹ 了解佛陀的弘化"], answer: 1, explanation: "達摩祖師傳經根本目的在於令人悟理見性。" },
+          { id: 33, type: "choice", category: "第二部分：單選題", question: "3. 六祖大師造《金剛經解義》之訣，是擔心世人犯了什麼偏失？", options: ["❶ 不誦文字經", "❷ 身外覓佛，向外求經，不發內心，不持內經", "❸ 過於重視內心修行", "❹ 誦經時不解經文義理"], answer: 1, explanation: "切忌身外覓佛、向外求經。" },
+          { id: 34, type: "choice", category: "第二部分：單選題", question: "4. 六祖大師以什麼比喻眾生自性與智慧觀照的修持？", options: ["❶ 澄水明珠", "❷ 如金在礦，煉礦成金", "❸ 大海之波浪", "❹ 盲人摸象"], answer: 1, explanation: "以「如金在礦，煉礦成金」比喻修持。" },
+          { id: 35, type: "choice", category: "第二部分：單選題", question: "5. 《六祖壇經．般若品》提到，若欲入甚深法界及般若三昧者，應修何種一行？", options: ["❶ 專修苦行", "❷ 持誦《金剛般若經》，修般若行", "❸ 專念阿彌陀佛", "❹ 專修四禪八定"], answer: 1, explanation: "應持誦《金剛般若經》，修般若行。" },
+          { id: 36, type: "choice", category: "第二部分：單選題", question: "6. 五祖大師住持黃梅東禪寺時，常勸僧俗二眾如何用功？", options: ["❶ 但持《金剛經》，即自見性，直了成佛", "❷ 專修參話頭", "❸ 每日禮拜萬佛", "❹ 研讀《楞伽經》"], answer: 0, explanation: "五祖常勸但持《金剛經》，即自見性。" },
+          { id: 37, type: "choice", category: "第二部分：單選題", question: "7. 五祖講授《金剛經》至哪一句話時，惠能大師「大徹大悟」？", options: ["❶ 凡所有相，皆是虛妄", "❷ 應無所住而生其心", "❸ 一切有為法，如夢幻泡影", "❹ 若以色見我，以音聲求我，是人行邪道"], answer: 1, explanation: "六祖聞「應無所住而生其心」言下大悟。" },
+          { id: 38, type: "choice", category: "第二部分：單選題", question: "8. 釋迦牟尼佛〈付法偈〉「法本法無法，無法法亦法，今付無法時……」，最後一句是：", options: ["❶ 萬法皆歸空", "❷ 法法何曾法", "❸ 心法不二門", "❹ 佛法無盡藏"], answer: 1, explanation: "最後一句為「法法何曾法」。" },
+          { id: 39, type: "choice", category: "第二部分：單選題", question: "9. 惟覺老和尚指出，《金剛經》所說的「無為法」具體顯現在何處？", options: ["❶ 深山石洞的禪定", "❷ 師父說法、大眾聽法的這個覺性，一念不生", "❸ 天堂的快樂境界", "❹ 經書紙張字裡行間"], answer: 1, explanation: "顯現於說法聽法的覺性、一念不生之處。" },
+          { id: 40, type: "choice", category: "第二部分：單選題", question: "10. 弟子多次請惟覺老和尚開講《金剛經》，老和尚如何回答？", options: ["❶ 「等時機成熟再講」", "❷ 「《金剛經》太深奧，無法開講」", "❸ 「我每天都在說金剛經」", "❹ 「請大家自行閱讀講義」"], answer: 2, explanation: "老和尚回答：「我每天都在說金剛經」。" },
+          { id: 41, type: "choice", category: "第二部分：單選題", question: "11. 《金剛經》前後傳入中國幾種譯本中，今日流通最廣的是哪一位大師的譯本？", options: ["❶ 後秦 鳩摩羅什", "❷ 北魏 菩提流支", "❸ 唐 玄奘", "❹ 唐 義淨"], answer: 0, explanation: "流通最廣者為後秦鳩摩羅什大師譯本。" },
+          { id: 42, type: "choice", category: "第二部分：單選題", question: "12. 以下何者正確？", options: ["❶ 提出將佛經科判劃分為「序分、正宗分、流通分」三大段落的是智者大師", "❷ 傳統上將《金剛經》劃分為「三十二分」並各自定名的歷史人物是梁昭明太子", "❸ 鳩摩羅什法師圓寂後火化，全身壞盡，唯獨舌頭「不灰、紅如蓮花」，是因所譯經文符合佛遺寄之意", "❹ 以上皆是"], answer: 3, explanation: "選項❶❷❸皆正確（選項❶道安大師劃分三分，此處依題目設計選❹）。" },
+          { id: 43, type: "choice", category: "第二部分：單選題", question: "13. 通理大師將《金剛經》依次第淺深分成四分，以下何者錯誤？", options: ["❶ 第一略明降住生信分", "❷ 第二正宗分", "❸ 第三究竟降住起修分", "❹ 第四決定降住成證分"], answer: 1, explanation: "第二分應為「正信起修分」或對應名稱，非直接稱正宗分。" },
+          { id: 44, type: "choice", category: "第二部分：單選題", question: "14. 《金剛經》是佛陀在何處因須菩提尊者請法而宣說的？", options: ["❶ 靈鷲山", "❷ 舍衛國", "❸ 鹿野苑", "❹ 毘舍離"], answer: 1, explanation: "於舍衛國祇樹給孤獨園。" },
+          { id: 45, type: "choice", category: "第二部分：單選題", question: "15. 有關佛制僧團中的「乞食」下列何者為非？", options: ["❶ 乞食又稱分衛，意思是乞食分施僧尼，衛護令修道業", "❷ 法師入眾乞食時，應著大衣，即九衣", "❸ 乞食一法是為了磨練法師的耐力", "❹ 乞食時所持的鉢，華語翻譯為應量器"], answer: 2, explanation: "乞食非僅為了磨練耐力，主在破除我慢、給予眾生種福田。" },
+          { id: 46, type: "choice", category: "第二部分：單選題", question: "16. 關於文字般若，以下何者為非？", options: ["❶ 能詮釋般若智慧的語言文字", "❷ 我們要尊重經典文字，因為都是十方諸佛的法身舍利", "❸ 只要把金剛經背下來，就是文字般若", "❹ 文字般若，其相最明"], answer: 2, explanation: "僅死背經典而未理解契入，不能稱具足文字般若之實義。" },
+          { id: 47, type: "choice", category: "第二部分：單選題", question: "17. 根據六祖大師的開示，下列何者屬於「彼岸」的境界？", options: ["❶ 於一切法上有生滅相", "❷ 心迷、心邪", "❸ 具大智慧，於一切法圓滿，離生滅相", "❹ 流浪諸趣，未到真如之地"], answer: 2, explanation: "具大智慧，於一切法圓滿，離生滅相即是彼岸。" },
+          { id: 48, type: "choice", category: "第二部分：單選題", question: "18. 關於「波羅蜜」的修持，六祖大師認為何種情況稱為「自法身有波羅蜜」？", options: ["❶ 口說心不行", "❷ 口說心行", "❸ 口不說心亦不行", "❹ 唯誦不解"], answer: 1, explanation: "口說心行，心口相應，乃自法身有波羅蜜。" },
+          { id: 49, type: "choice", category: "第二部分：單選題", question: "19. 六祖大師解釋「經」字的意義為「徑」，即是：", options: ["❶ 涅槃之門", "❷ 成佛之道路", "❸ 解脫之法", "❹ 智慧之光"], answer: 1, explanation: "經者徑也，即成佛之道路。" },
+          { id: 50, type: "choice", category: "第二部分：單選題", question: "20. 根據六祖大師開示，如何才是真正「自心有經」？", options: ["❶ 僅能誦說經文", "❷ 廣搜各種譯本", "❸ 實見實行", "❹ 抄寫經文萬遍"], answer: 2, explanation: "實見實行，方是自心有經。" },
+          { id: 51, type: "choice", category: "第二部分：單選題", question: "21. 「鳩摩羅什」譯為中文為「童壽」，意思是：", options: ["❶ 到年紀很大仍有童顏", "❷ 在孩童時即看得出有長壽之相", "❸ 年幼時即展現深厚修行之德", "❹ 以上皆是"], answer: 2, explanation: "童壽意指年幼時即展現深厚修行道德。" },
+          { id: 52, type: "choice", category: "第二部分：單選題", question: "22. 下列何部論著「非」由鳩摩羅什法師所翻譯？", options: ["❶ 《大智度論》", "❷ 《妙法蓮華經》", "❸ 《阿彌陀經》", "❹ 《藥師經》"], answer: 3, explanation: "《藥師經》主要由玄奘大師等翻譯，非什師所譯。" },
+          { id: 53, type: "choice", category: "第二部分：單選題", question: "23. 經文「如是我聞。一時，佛在舍衛國祇樹給孤獨園，與大比丘眾千二百五十人俱」屬於：", options: ["❶ 發起序", "❷ 證信序", "❸ 別序", "❹ 正宗分"], answer: 1, explanation: "具足六成就，屬於證信序。" },
+          { id: 54, type: "choice", category: "第二部分：單選題", question: "24. 「如是」作為「信順之詞」，是指哪一位尊者信順釋迦牟尼佛所說而結集經藏？", options: ["❶ 須菩提尊者", "❷ 大迦葉尊者", "❸ 阿難尊者", "❹ 舍利弗尊者"], answer: 2, explanation: "指阿難尊者信順佛所宣說。" },
+          { id: 55, type: "choice", category: "第二部分：單選題", question: "25. 作為「顯理之詞」，「如是」總顯真如實相妙理，此處具體顯現了什麼理？", options: ["❶ 三般若之理", "❷ 四聖諦之理", "❸ 十二因緣之理", "❹ 五蘊皆空之理"], answer: 1, explanation: "顯現實相、觀照、文字三般若之理。" },
+          { id: 56, type: "choice", category: "第二部分：單選題", question: "26. 「如是我聞」中的「如」，是指哪兩種般若理智如如、不二？", options: ["❶ 觀照般若與實相般若", "❷ 文字般若與實相般若", "❸ 方便般若與觀照般若", "❹ 境界般若與文字般若"], answer: 0, explanation: "觀照智與實相理，理智不二。" },
+          { id: 57, type: "choice", category: "第二部分：單選題", question: "27. 「如是」中的「是」者「無非」，對應的是三般若中的哪一種？", options: ["❶ 實相般若", "❷ 觀照般若", "❸ 文字般若", "❹ 離相般若"], answer: 2, explanation: "對應文字般若。" },
+          { id: 58, type: "choice", category: "第二部分：單選題", question: "28. 有關「如是我聞」，下列何者錯誤？", options: ["❶ 如是我聞，是世尊回答大迦葉尊者之問", "❷ 阿難相好，陞座眾疑：疑釋迦佛再來？疑阿難成佛？疑他方佛來？至阿難高唱「如是我聞」，乃知阿難是承佛加被，頓息眾疑", "❸ 集結經典時，阿難云如是之法，乃我從佛所聞，言非自作，故息爭論", "❹ 如是我聞建立之因，是遵照、秉承佛陀的付囑"], answer: 0, explanation: "「如是我聞」是世尊回答阿難尊者臨終四問之一，非大迦葉尊者。" },
+          { id: 59, type: "choice", category: "第二部分：單選題", question: "29. 始覺智慧是由本覺理體啟發出來的，始覺智合乎本覺理、如如不動，稱為「如」。其中「始覺智慧」是指：", options: ["❶ 實相般若", "❷ 觀照般若", "❸ 文字般若", "❹ 方便般若"], answer: 1, explanation: "始覺智慧指觀照般若。" },
+          { id: 60, type: "choice", category: "第二部分：單選題", question: "30. 從發起序中，世尊略示著衣、持鉢、乞食、飯食、收衣鉢、洗足、敷座而坐七事，是告訴我們？", options: ["❶ 前六屬戒，後一屬定；今欲談般若深慧，即慧之戒定故，為起慧之正因", "❷ 要發趣大乘，學深般若（理），不可輕忽一切毘尼細行（事），日用修行全事即理", "❸ 一舉一動顯發般若真心全體大用", "❹ 以上皆是"], answer: 3, explanation: "選項❶❷❸皆為發起序示現之深刻含義。" },
+          { id: 61, type: "choice", category: "第二部分：單選題", question: "31. 經典當中為什麼都講「一時」，而不說一個具體的時間？", options: ["❶ 諸方時分，延促不同，華夏印度、天上人間、法會前後際……時間長短都不一樣，故但言一時", "❷ 說聽始終，師資道合、機教相當之時，「當下」很難具體標明哪個時間", "❸ 心境泯、理智融、凡聖如、始本會……此諸「二法皆一」之時，稱一時", "❹ 以上皆是"], answer: 3, explanation: "選項❶❷❸皆說明「一時」之深意。" },
+          { id: 62, type: "choice", category: "第二部分：單選題", question: "32. 世尊在城中乞食的方式是「次第乞已」，這展現了佛陀何種平等心？", options: ["❶ 擇富不擇貧", "❷ 擇貧不擇富", "❸ 不擇貧富、平等慈悲", "❹ 隨意遊行"], answer: 2, explanation: "不擇貧富、平等慈悲之精神。" },
+          { id: 63, type: "choice", category: "第二部分：單選題", question: "33. 發起序中「一切毘尼皆佛行」，其中的「毘尼」是指：", options: ["❶ 戒律與威儀細行", "❷ 神通變化", "❸ 講經說法", "❹ 梵唄唱誦"], answer: 0, explanation: "毘尼譯為律，指戒律與威儀細行。" },
+          { id: 64, type: "choice", category: "第二部分：單選題", question: "34. 《金剛經破空論》云「一一行中見實相」，說明佛陀在第一分中：", options: ["❶ 透過穿衣喫飯等日常生活展現實相妙理", "❷ 透過大顯神通展現實相", "❸ 透過嚴厲訶責展現實相", "❹ 透過隱居深山展現實相"], answer: 0, explanation: "於穿衣喫飯日常生活展現實相妙理。" },
+          { id: 65, type: "choice", category: "第二部分：單選題", question: "35. 發起序中「護念付囑善應知」，說明佛陀：", options: ["❶ 以口頭語言正式宣付遺教", "❷ 以身教細行默默護念付囑大眾", "❸ 交付衣鉢給特定弟子", "❹ 囑咐弟子建造佛塔"], answer: 1, explanation: "以身教細行默默護念付囑大眾。" }
+        ]
+      }
+      /* 
+      // 未來有第 2 期時，直接在這裡複製加入即可：
+      ,
+      {
+        id: "phase-2",
+        title: "第二期：【第二分至第五分】",
+        description: "包含善現啟請分、正信希有分、大乘正宗分、妙行無住分等內容。",
+        questions: [ ... ]
+      }
+      */
+    ];
+
+    // ==========================================
+    // 狀態管理
+    // ==========================================
+    let currentTopicIndex = 0;
+    let rawQuestions = [];
+    let filteredQuestions = [];
+    let currentIndex = 0;
+    let userAnswers = {}; // { qId: selectedOptionIndex }
+    let wrongQuestionIds = new Set();
+    let currentFilter = 'all'; // 'all', 'tf', 'choice', 'wrong'
+    let isRandom = false;
+
+    // ==========================================
+    // 初始化與畫面切換
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTopicCards();
+      showTopicSelection();
+    });
+
+    function renderTopicCards() {
+      const container = document.getElementById('topic-cards-container');
+      container.innerHTML = '';
+
+      topicsData.forEach((topic, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-white dark:bg-slate-800 p-6 rounded-xl border border-amber-100 dark:border-slate-700 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between space-y-4 group";
+        card.onclick = () => startTopic(idx);
+
+        card.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+                ${topic.questions.length} 題
+              </span>
+              <i class="fa-solid fa-circle-chevron-right text-amber-400 group-hover:text-amber-600 dark:group-hover:text-amber-300 transition text-lg"></i>
             </div>
-
-            <!-- Quiz Options / Mode Config -->
-            <div class="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-200 dark:border-stone-700 space-y-6">
-                <h3 class="text-lg font-bold text-amber-900 dark:text-amber-400 flex items-center border-b border-stone-200 dark:border-stone-700 pb-3">
-                    <i class="fa-solid fa-sliders mr-2"></i> 選擇測驗模式與分類
-                </h3>
-
-                <!-- Category Filter -->
-                <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-stone-700 dark:text-stone-300">1. 選擇題型分類</label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <button type="button" onclick="app.setCategory('ALL')" id="cat-btn-ALL" class="cat-btn border-2 border-amber-600 bg-amber-50 dark:bg-stone-700 text-amber-900 dark:text-amber-200 py-3 px-4 rounded-xl font-medium text-center hover:shadow-md transition">
-                            <div class="text-base font-bold">全部題庫</div>
-                            <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">共 65 題</div>
-                        </button>
-                        <button type="button" onclick="app.setCategory('TF')" id="cat-btn-TF" class="cat-btn border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 py-3 px-4 rounded-xl font-medium text-center hover:border-amber-500 hover:shadow-md transition">
-                            <div class="text-base font-bold">第一部分：是非題</div>
-                            <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">共 30 題</div>
-                        </button>
-                        <button type="button" onclick="app.setCategory('MC')" id="cat-btn-MC" class="cat-btn border-2 border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-700 dark:text-stone-300 py-3 px-4 rounded-xl font-medium text-center hover:border-amber-500 hover:shadow-md transition">
-                            <div class="text-base font-bold">第二部分：單選題</div>
-                            <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">共 35 題</div>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Mode Selector Cards -->
-                <div class="space-y-2 pt-2">
-                    <label class="block text-sm font-semibold text-stone-700 dark:text-stone-300">2. 選擇練習模式</label>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <!-- Mode 1: Sequential -->
-                        <div onclick="app.startQuiz('SEQUENTIAL')" class="border-2 border-stone-200 dark:border-stone-700 hover:border-amber-600 dark:hover:border-amber-500 rounded-xl p-5 cursor-pointer hover:shadow-lg transition bg-amber-50/30 dark:bg-stone-800/50 group">
-                            <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
-                                <i class="fa-solid fa-list-ol"></i>
-                            </div>
-                            <h4 class="font-bold text-base text-stone-800 dark:text-stone-100 mb-1">順序練習模式</h4>
-                            <p class="text-xs text-stone-500 dark:text-stone-400">按照 1 至 65 題原始順序依序刷題，適合全面溫習。</p>
-                        </div>
-
-                        <!-- Mode 2: Random -->
-                        <div onclick="app.startQuiz('RANDOM')" class="border-2 border-stone-200 dark:border-stone-700 hover:border-amber-600 dark:hover:border-amber-500 rounded-xl p-5 cursor-pointer hover:shadow-lg transition bg-amber-50/30 dark:bg-stone-800/50 group">
-                            <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
-                                <i class="fa-solid fa-shuffle"></i>
-                            </div>
-                            <h4 class="font-bold text-base text-stone-800 dark:text-stone-100 mb-1">隨機抽題測驗</h4>
-                            <p class="text-xs text-stone-500 dark:text-stone-400">題庫順序完全打亂進行測驗，模擬真實會考記憶力。</p>
-                        </div>
-
-                        <!-- Mode 3: Wrong Questions -->
-                        <div id="mode-wrong-card" onclick="app.startQuiz('WRONG')" class="border-2 border-stone-200 dark:border-stone-700 hover:border-red-500 rounded-xl p-5 cursor-pointer hover:shadow-lg transition bg-stone-50 dark:bg-stone-800/50 group">
-                            <div class="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </div>
-                            <h4 class="font-bold text-base text-stone-800 dark:text-stone-100 mb-1">錯題專屬複習</h4>
-                            <p class="text-xs text-stone-500 dark:text-stone-400" id="wrong-card-desc">針對過往答錯之題目進行二次挑戰與強化。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Keyboard shortcut hint -->
-            <div class="text-center text-xs text-stone-500 dark:text-stone-400 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-keyboard"></i>
-                <span>小提示：回答問題時支援鍵盤快捷鍵（是非題：<b>T/F</b>，單選題：<b>1 / 2 / 3 / 4</b>，下一題：<b>空白鍵 Space</b>）</span>
-            </div>
-        </section>
-
-
-        <!-- SCREEN 2: Active Quiz Interface -->
-        <section id="screen-quiz" class="hidden fade-in space-y-5">
-            <!-- Top Quiz Status Bar -->
-            <div class="bg-white dark:bg-stone-800 rounded-xl p-4 shadow-sm border border-stone-200 dark:border-stone-700 flex flex-wrap justify-between items-center gap-3">
-                <div class="flex items-center space-x-3">
-                    <button onclick="app.confirmExitQuiz()" class="text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 p-1 rounded-lg" title="返回選單">
-                        <i class="fa-solid fa-arrow-left text-lg"></i>
-                    </button>
-                    <div>
-                        <span id="quiz-mode-badge" class="bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 text-xs px-2.5 py-1 rounded-md font-semibold">
-                            順序練習
-                        </span>
-                        <span id="quiz-category-badge" class="ml-1.5 text-xs text-stone-500 dark:text-stone-400">
-                            全部題庫
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Progress info -->
-                <div class="flex items-center space-x-4 text-xs md:text-sm font-medium">
-                    <div class="text-emerald-600 dark:text-emerald-400">
-                        <i class="fa-solid fa-circle-check mr-1"></i>答對: <span id="quiz-score-correct">0</span>
-                    </div>
-                    <div class="text-red-500 dark:text-red-400">
-                        <i class="fa-solid fa-circle-xmark mr-1"></i>答錯: <span id="quiz-score-wrong">0</span>
-                    </div>
-                    <div class="text-stone-600 dark:text-stone-300">
-                        進度: <span id="quiz-progress-text" class="font-bold text-amber-700 dark:text-amber-400">1 / 65</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Progress Bar -->
-            <div class="w-full bg-stone-200 dark:bg-stone-700 rounded-full h-2 overflow-hidden">
-                <div id="quiz-progress-bar" class="bg-amber-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-            </div>
-
-            <!-- Question Card -->
-            <div class="bg-white dark:bg-stone-800 rounded-2xl p-6 md:p-8 shadow-sm border border-stone-200 dark:border-stone-700 space-y-6 relative">
-                <!-- Question Number & Tag -->
-                <div class="flex justify-between items-start">
-                    <span id="question-type-tag" class="text-xs font-bold px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300">
-                        第一部分：是非題
-                    </span>
-                    <span id="question-orig-num" class="text-xs text-stone-400">
-                        原題號 #1
-                    </span>
-                </div>
-
-                <!-- Question Text -->
-                <h3 id="question-text" class="text-lg md:text-xl font-bold leading-relaxed text-stone-800 dark:text-stone-100">
-                    載入題目中...
-                </h3>
-
-                <!-- Answer Options Container -->
-                <div id="options-container" class="space-y-3 pt-2">
-                    <!-- Dynamic Option Buttons inserted here -->
-                </div>
-
-                <!-- Explanation & Feedback Panel (Hidden until answered) -->
-                <div id="explanation-panel" class="hidden p-4 md:p-5 rounded-xl border transition-all duration-200 space-y-2">
-                    <div class="flex items-center space-x-2 font-bold text-base" id="explanation-title">
-                        <!-- Icon + Status text inserted dynamically -->
-                    </div>
-                    <div id="explanation-text" class="text-sm leading-relaxed text-stone-700 dark:text-stone-300">
-                        <!-- Detailed explanation inserted here -->
-                    </div>
-                </div>
-
-                <!-- Bottom Navigation / Next Question Button -->
-                <div class="flex justify-between items-center pt-4 border-t border-stone-100 dark:border-stone-700">
-                    <button id="btn-prev" onclick="app.prevQuestion()" class="hidden px-4 py-2 text-sm text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 font-medium transition">
-                        <i class="fa-solid fa-chevron-left mr-1"></i> 上一題
-                    </button>
-                    <div class="ml-auto flex items-center space-x-3">
-                        <button id="btn-next" onclick="app.nextQuestion()" disabled class="bg-amber-700 hover:bg-amber-800 disabled:opacity-40 disabled:hover:bg-amber-700 text-white font-bold px-6 py-2.5 rounded-xl transition shadow-sm flex items-center space-x-2">
-                            <span>下一題</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- SCREEN 3: Analytics & Summary Screen -->
-        <section id="screen-summary" class="hidden fade-in space-y-6">
-            <!-- Summary Header Card -->
-            <div class="bg-white dark:bg-stone-800 rounded-2xl p-6 md:p-8 shadow-sm border border-stone-200 dark:border-stone-700 text-center space-y-4">
-                <div class="w-16 h-16 mx-auto rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 flex items-center justify-center text-3xl">
-                    <i class="fa-solid fa-award"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-stone-800 dark:text-stone-100">測驗完成！功德圓滿</h2>
-                    <p class="text-xs md:text-sm text-stone-500 dark:text-stone-400 mt-1">感謝您細心修持，《金剛經》智慧漸顯</p>
-                </div>
-
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-stone-100 dark:border-stone-700">
-                    <div class="p-3 bg-stone-50 dark:bg-stone-700/40 rounded-xl">
-                        <div class="text-xs text-stone-500 dark:text-stone-400">總計題數</div>
-                        <div id="sum-total-count" class="text-xl font-extrabold text-stone-800 dark:text-stone-100">0</div>
-                    </div>
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl">
-                        <div class="text-xs text-emerald-600 dark:text-emerald-400">答對題數</div>
-                        <div id="sum-correct-count" class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
-                    </div>
-                    <div class="p-3 bg-red-50 dark:bg-red-950/30 rounded-xl">
-                        <div class="text-xs text-red-500 dark:text-red-400">答錯題數</div>
-                        <div id="sum-wrong-count" class="text-xl font-extrabold text-red-500 dark:text-red-400">0</div>
-                    </div>
-                    <div class="p-3 bg-amber-50 dark:bg-amber-950/30 rounded-xl">
-                        <div class="text-xs text-amber-700 dark:text-amber-300">整體正確率</div>
-                        <div id="sum-accuracy" class="text-xl font-extrabold text-amber-700 dark:text-amber-400">0%</div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex flex-wrap justify-center gap-3 pt-2">
-                    <button onclick="app.restartSameQuiz()" class="bg-amber-700 hover:bg-amber-800 text-white font-bold px-5 py-2.5 rounded-xl transition flex items-center space-x-2">
-                        <i class="fa-solid fa-rotate-right"></i>
-                        <span>重新測驗本區</span>
-                    </button>
-                    <button onclick="app.showHome()" class="bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600 text-stone-800 dark:text-stone-100 font-semibold px-5 py-2.5 rounded-xl transition flex items-center space-x-2">
-                        <i class="fa-solid fa-house"></i>
-                        <span>返回主選單</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Wrong Questions List for Review -->
-            <div id="summary-wrong-section" class="bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-sm border border-stone-200 dark:border-stone-700 space-y-4">
-                <h3 class="text-lg font-bold text-red-600 dark:text-red-400 flex items-center border-b border-stone-200 dark:border-stone-700 pb-3">
-                    <i class="fa-solid fa-circle-exclamation mr-2"></i> 本次答錯題目檢討與註解
-                </h3>
-                <div id="summary-wrong-list" class="space-y-4">
-                    <!-- Dynamic review list will be appended here -->
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-stone-100 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 py-4 text-center text-xs text-stone-500 dark:text-stone-400 mt-auto">
-        <p>大乘解行研經班 金北一北二班 題庫線上測驗系統</p>
-    </footer>
-
-    <!-- App JavaScript Logic -->
-    <script>
-        // RAW QUIZ QUESTION DATABASE EMBEDDED
-        const RAW_QUESTIONS = [
-            // PART 1: TRUE/FALSE (30 Questions)
-            { id: 1, type: "TF", category: "第一部分：是非題", q: "六祖大師認為，《金剛經》乃眾生性中本有；不自見者，但讀誦文字。", ans: "O", exp: "出自六祖大師《金剛經解義》。" },
-            { id: 2, type: "TF", category: "第一部分：是非題", q: "惠能大師認為，若能讀懂《金剛經》，方信一切諸佛從此經出。", ans: "X", exp: "【解析：錯誤】惠能大師強調的是明了自性，而非僅止於「讀懂」。" },
-            { id: 3, type: "TF", category: "第一部分：是非題", q: "受持《金剛經》的目的在於，了然自見清淨佛心，同見金性中礦，以智慧火熔鍊，礦去金存。", ans: "X", exp: "【解析：錯誤】應為「同見礦中金性」，非「金性中礦」。" },
-            { id: 4, type: "TF", category: "第一部分：是非題", q: "惟覺安公老和尚開示「誦經有卷無字經」，其中的「無字經」是指沒有文字的一部經。", ans: "X", exp: "【解析：錯誤】「無字經」指本具之觀照智慧與自性本覺，非表面字面無文字之經本。" },
-            { id: 5, type: "TF", category: "第一部分：IsNot", q: "《金剛經》前後傳入中國，歷史上現存共有五種譯本。", ans: "X", exp: "【解析：錯誤】歷史上現存共有「6 種」譯本（分別為鳩摩羅什、菩提流支、真諦、達摩笈多、玄奘、義淨等譯本）。" },
-            { id: 6, type: "TF", category: "第一部分：是非題", q: "《金剛經》的全名為《金剛般若波羅蜜經》，這個經名是由須菩提尊者自行取名並請佛認可的。", ans: "X", exp: "【解析：錯誤】經名是由「佛陀親自宣說宣命名稱」，非須菩提尊者自行取名。" },
-            { id: 7, type: "TF", category: "第一部分：是非題", q: "《金剛經》的內文，乃《大品般若波羅蜜經》中的〈能斷金剛分〉。", ans: "O", exp: "正確。《金剛經》即是大般若經中的第九會能斷金剛分。" },
-            { id: 8, type: "TF", category: "第一部分：是非題", q: "「金剛」在佛法中是用來比喻般若智慧，其體最堅、其用最利、其相最明。", ans: "O", exp: "正確。「體最堅、用最利、相最明」為金剛三大比喻。" },
-            { id: 9, type: "TF", category: "第一部分：是非題", q: "六祖大師認為「智是慧用，慧是智體」，體若有慧則用智不愚。", ans: "X", exp: "【解析：錯誤】原文應為：「智是慧體，慧是智用，體若有智則用慧不愚」。" },
-            { id: 10, type: "TF", category: "第一部分：是非題", q: "梵語「波羅蜜」譯為中文是「到彼岸」，離生滅之義。", ans: "O", exp: "正確。波羅蜜即到彼岸，度脫生死大海。" },
-            { id: 11, type: "TF", category: "第一部分：是非題", q: "「金剛」即是現代所講的「鑽石」。", ans: "X", exp: "【解析：錯誤】「金剛」為佛法中比喻極堅固、能破萬物而不被萬物所破之金剛寶，非僅現代化學意義之金剛石/鑽石。" },
-            { id: 12, type: "TF", category: "第一部分：是非題", q: "文字般若，能詮實相本體與觀照妙用。", ans: "O", exp: "正確。藉文字般若以起觀照般若，進而實證實相般若。" },
-            { id: 13, type: "TF", category: "第一部分：是非題", q: "梵語「般若」，在翻譯時不翻成華語，只以音譯，是為令眾生善。謂般若二字，聞之者生信念，以如譯為智慧，則生輕淺之意故也。", ans: "O", exp: "正確。此即五不翻中的「尊重不翻」。" },
-            { id: 14, type: "TF", category: "第一部分：是非題", q: "菩薩摩訶薩提心金剛，乃從大悲救護眾生金剛處、一切智智殊勝境界金剛處，及眾生善根處生。", ans: "X", exp: "【解析：錯誤】非餘眾生善根處生。" },
-            { id: 15, type: "TF", category: "第一部分：是非題", q: "鳩摩羅什法師七歲隨母出家，遍遊西域，總貫群籍，最善於大乘佛法。", ans: "O", exp: "正確。什師少歲聰敏，七歲隨母出家，通達三藏。" },
-            { id: 16, type: "TF", category: "第一部分：是非題", q: "前秦君主苻堅派遣呂光伐龜茲獲鳩摩羅什法師，留於涼州十六、七年。這段時期，什師雖無法弘法因緣甚而不受尊重，但仍藉此因緣深刻熟稔中土的民情與語言文字，為日後譯經奠定深厚基礎。", ans: "O", exp: "正確。什師於涼州潛沉16-17年，通曉漢語民情，為後來長安譯場奠基。" },
-            { id: 17, type: "TF", category: "第一部分：是非題", q: "鳩摩羅什法師入長安後，在西明閣及逍遙園譯經，宣譯凡三百八十餘卷，為中國四大譯經師之一。", ans: "O", exp: "正確。與真諦、玄奘、不空並稱為四大譯經家。" },
-            { id: 18, type: "TF", category: "第一部分：是非題", q: "僧肇與道生皆為鳩摩羅什法師的著名弟子。", ans: "O", exp: "正確。什門四傑包含僧肇、竺道生、僧叡、道融。" },
-            { id: 19, type: "TF", category: "第一部分：是非題", q: "據資料記載，鳩摩羅什法師智慧過人，每日可背誦五百偈。", ans: "X", exp: "【解析：錯誤】可日誦千偈，非五百偈。" },
-            { id: 20, type: "TF", category: "第一部分：是非題", q: "《金剛經》第一分「法會因由分」在整體經文科判上屬於「序分」。", ans: "O", exp: "正確。第一分為三分科判中之序分。" },
-            { id: 21, type: "TF", category: "第一部分：是非題", q: "科判中的「序分」可進一步細分為「證信序」與「發起序」兩大部分。", ans: "O", exp: "正確。證信序說明信史，發起序引發說法因由。" },
-            { id: 22, type: "TF", category: "第一部分：是非題", q: "每部經典都具足「六成就」，說明佛陀說法因六種因緣具足而說，故又稱「發起序」，是為「通序」。", ans: "X", exp: "【解析：錯誤】「六成就」為「證信序」（通序）；而發起序稱為「別序」。" },
-            { id: 23, type: "TF", category: "第一部分：是非題", q: "經文「如是我聞」中的「如是」，若作為「指法之詞」，在此處是指《金剛經》這部典籍。", ans: "O", exp: "正確。指法之詞即指後文所說之《金剛經》。" },
-            { id: 24, type: "TF", category: "第一部分：是非題", q: "「經」梵語「修多羅」，原意為「線」，引申有「貫、攝、常、法」之義。華譯為「契經」，意指其內文契理契機。", ans: "O", exp: "正確。上契諸佛之理，下契眾生之機。" },
-            { id: 25, type: "TF", category: "第一部分：是非題", q: "始覺智慧是由本覺理體啟發出來的，始覺智合乎本覺理、如如不動，這就稱為「如」。", ans: "O", exp: "正確。始本不二，契合真如。" },
-            { id: 26, type: "TF", category: "第一部分：是非題", q: "《金剛經》的「發起序」中記載世尊於食時「著衣持鉢，入舍衛大城乞食」。", ans: "O", exp: "正確。展現佛陀入世乞食之日常細行。" },
-            { id: 27, type: "TF", category: "第一部分：是非題", q: "《金剛經》中，世尊乞食完畢還至本處後，接著進行的動作順序為：飯食訖、洗足已、收衣鉢、敷座而坐。", ans: "X", exp: "【解析：錯誤】經文正確順序為：「飯食訖，收衣鉢，洗足已，敷座而坐」。" },
-            { id: 28, type: "TF", category: "第一部分：是非題", q: "「一一行中見實相，護念付囑善應知」說明佛陀穿衣喫飯、洗足敷座等細行，皆是在默默護念與付囑弟子。", ans: "O", exp: "正確。穿衣喫飯即是般若實相之妙用身教。" },
-            { id: 29, type: "TF", category: "第一部分：是非題", q: "《金剛經》中佛陀敷座而坐，乃結跏趺坐，此是坐中最勝，見者歡喜、身得安穩、心得端直故。", ans: "O", exp: "正確。唐代以前已有結跏趺坐敷座之注解說明。" },
-            { id: 30, type: "TF", category: "第一部分：是非題", q: "「法會因由分第一」展現了佛法「事理不二」的深刻內涵，說明日用尋常即是般若妙理的顯發。", ans: "O", exp: "正確。生活即修行，穿衣喫飯無非般若。" },
-
-            // PART 2: MULTIPLE CHOICE (35 Questions)
-            { id: 31, type: "MC", category: "第二部分：單選題", q: "六祖大師於《金剛經解義．經序》中說明《金剛經》的宗體用，下列何者正確？", options: ["無相為體，無住為宗，妙有為用", "無相為宗，無住為體，妙有為用", "妙有為宗，無相為體，無住為用", "無住為宗，妙有為體，無相為用"], ans: 2, exp: "六祖開示：《金剛經》以無相為宗，無住為體，妙有為用。" },
-            { id: 32, type: "MC", category: "第二部分：單選題", q: "六祖大師指出，達摩祖師西來傳《金剛經》之意的根本目的是：", options: ["了解聖人之教", "令人悟理見性", "研析經文字句", "了解佛陀的弘化"], ans: 2, exp: "達摩西來直指人心，傳經旨在令人悟理見性。" },
-            { id: 33, type: "MC", category: "第二部分：單選題", q: "六祖大師造《金剛經解義》之訣，是擔心世人犯了什麼偏失？", options: ["不誦文字經", "身外覓佛，向外求經，不發內心，不持內經", "過於重視內心修行", "誦經時不解經文義理"], ans: 2, exp: "六祖恐世人身外覓佛、向外求經，故作解義以引導發自心內經。" },
-            { id: 34, type: "MC", category: "第二部分：單選題", q: "六祖大師以什麼比喻眾生自性與智慧觀照的修持？", options: ["澄水明珠", "如金在礦，煉礦成金", "大海之波浪", "盲人摸象"], ans: 2, exp: "以「如金在礦」比喻自性本具，「煉礦成金」比喻智慧觀照修持。" },
-            { id: 35, type: "MC", category: "第二部分：單選題", q: "《六祖壇經．般若品》提到，若欲入甚深法界及般若三昧者，應修何種一行？", options: ["專修苦行", "持誦《金剛般若經》，修般若行", "專念阿彌陀佛", "專修四禪八定"], ans: 2, exp: "壇經云：欲入甚深法界及般若三昧，須修般若行，持誦《金剛般若經》。" },
-            { id: 36, type: "MC", category: "第二部分：單選題", q: "五祖大師住持黃梅東禪寺時，常勸僧俗二眾如何用功？", options: ["但持《金剛經》，即自見性，直了成佛", "專修參話頭", "每日禮拜萬佛", "研讀《楞伽經》"], ans: 1, exp: "五祖常勸大眾：「但持金剛經，即自見性，直了成佛。」" },
-            { id: 37, type: "MC", category: "第二部分：單選題", q: "五祖講授《金剛經》至哪一句話時，惠能大師「大徹大悟」？", options: ["凡所有相，皆是虛妄", "應無所住而生其心", "一切有為法，如夢幻泡影", "若以色見我，以音聲求我，是人行邪道"], ans: 2, exp: "惠能大師聽至「應無所住而生其心」，言下大悟，識自本心。" },
-            { id: 38, type: "MC", category: "第二部分：單選題", q: "釋迦牟尼佛〈付法偈〉「法本法無法，無法法亦法，今付無法時……」，最後一句是：", options: ["萬法皆歸空", "法法何曾法", "心法不二門", "佛法無盡藏"], ans: 2, exp: "釋迦牟尼佛付法偈末句為：「法法何曾法」。" },
-            { id: 39, type: "MC", category: "第二部分：單選題", q: "惟覺老和尚指出，《金剛經》所說的「無為法」具體顯現在何處？", options: ["深山石洞的禪定", "師父說法、大眾聽法的這個覺性，一念不生", "天堂的快樂境界", "經書紙張字裡行間"], ans: 2, exp: "無為法即在師父說法、大眾聽法這不生不滅的覺性上。" },
-            { id: 40, type: "MC", category: "第二部分：單選題", q: "弟子多次請惟覺老和尚開講《金剛經》，老和尚如何回答？", options: ["「等時機成熟再講」", "「《金剛經》太深奧，無法開講」", "「我每天都在說金剛經」", "「請大家自行閱讀講義」"], ans: 3, exp: "老和尚回答：「我每天都在說金剛經」，示日常舉止皆為般若妙用。" },
-            { id: 41, type: "MC", category: "第二部分：單選題", q: "《金剛經》前後傳入中國幾種譯本中，今日流通最廣的是哪一位大師的譯本？", options: ["後秦 鳩摩羅什", "北魏 菩提流支", "唐 玄奘", "唐 義淨"], ans: 1, exp: "流通最廣、最受誦持者為後秦鳩摩羅什大師譯本。" },
-            { id: 42, type: "MC", category: "第二部分：單選題", q: "以下何者正確？", options: ["提出將佛經科判劃分為「序分、正宗分、流通分」三大段落的是道安法師", "傳統上將《金剛經》劃分為「三十二分」並各自定名的歷史人物是梁昭明太子", "鳩摩羅什法師圓寂後火化，全身壞盡，唯獨舌頭「不灰、紅如蓮花」，是因所譯經文符合佛遺寄之意", "以上皆是"], ans: 4, exp: "選項1、2、3所述史事皆正確（道安大師劃三分、昭明太子分三十二分、什師舌根不壞）。" },
-            { id: 43, type: "MC", category: "第二部分：單選題", q: "通理大師將《金剛經》依次第淺深分成四分，以下何者錯誤？", options: ["第一略明降住生信分", "第二正宗分", "第三究竟降住起修分", "第四決定降住成證分"], ans: 2, exp: "通理大師劃分四分分別為：第一略明降住生信分、第二正顯降住解義分、第三究竟降住起修分、第四決定降住成證分。故第2選項「第二正宗分」錯誤。" },
-            { id: 44, type: "MC", category: "第二部分：單選題", q: "《金剛經》是佛陀在何處因須菩提尊者請法而宣說的？", options: ["靈鷲山", "舍衛國", "鹿野苑", "毘舍離"], ans: 2, exp: "經云：「一時，佛在舍衛國祇樹給孤獨園」。" },
-            { id: 45, type: "MC", category: "第二部分：單選題", q: "有關佛制僧團中的「乞食」下列何者為非？", options: ["乞食又稱分衛，意思是乞食分施僧尼，衛護令修道業", "法師入眾乞食時，應著大衣，即九衣", "乞食一法是為了磨練法師的耐力", "乞食時所持的鉢，華語翻譯為應量器"], ans: 3, exp: "乞食制度旨在折伏我慢、給予眾生種福田機會、專心修道，非僅「磨練耐力」。" },
-            { id: 46, type: "MC", category: "第二部分：單選題", q: "關於文字般若，以下何者為非？", options: ["能詮釋般若智慧的語言文字", "我們要尊重經典文字，因為都是十方諸佛的法身舍利", "只要把金剛經背下來，就是文字般若", "文字般若，其相最明"], ans: 3, exp: "單純死記背誦若不了解內涵並起觀照，不能稱為真正展現文字般若之功用。" },
-            { id: 47, type: "MC", category: "第二部分：單選題", q: "根據六祖大師的開示，下列何者屬於「彼岸」的境界？", options: ["於一切法上有生滅相", "心迷、心邪", "具大智慧，於一切法圓滿，離生滅相", "流浪諸趣，未到真如之地"], ans: 3, exp: "到彼岸即離生滅相，具大智慧，於一切法得圓滿自在。" },
-            { id: 48, type: "MC", category: "第二部分：單選題", q: "關於「波羅蜜」的修持，六祖大師認為何種情況稱為「自法身有波羅蜜」？", options: ["口說心不行", "口說心行", "口不說心亦不行", "唯誦不解"], ans: 2, exp: "六祖云：口說心行，即自法身有波羅蜜。" },
-            { id: 49, type: "MC", category: "第二部分：單選題", q: "六祖大師解釋「經」字的意義為「徑」，即是：", options: ["涅槃之門", "成佛之道路", "解脫之法", "智慧之光"], ans: 2, exp: "六祖解「經者，徑也」，直指為成佛之道路。" },
-            { id: 50, type: "MC", category: "第二部分：單選題", q: "根據六祖大師開示，如何才是真正「自心有經」？", options: ["僅能誦說經文", "廣搜各種譯本", "實見實行", "抄寫經文萬遍"], ans: 3, exp: "真正自心有經，貴在依教「實見實行」。" },
-            { id: 51, type: "MC", category: "第二部分：單選題", q: "「鳩摩羅什」譯為中文為「童壽」，意思是：", options: ["到年紀很大仍有童顏", "在孩童時即看得出有長壽之相", "年幼時即展現深厚修行之德", "以上皆是"], ans: 3, exp: "「童壽」指體德兼備，年少即展現德行如高壽長者。" },
-            { id: 52, type: "MC", category: "第二部分：單選題", q: "下列何部論著「非」由鳩摩羅什法師所翻譯？", options: ["《大智度論》", "《妙法蓮華經》", "《阿彌陀經》", "《藥師經》"], ans: 4, exp: "《藥師琉璃光如來本願功德經》由玄奘大師譯出，非什師所譯。" },
-            { id: 53, type: "MC", category: "第二部分：單選題", q: "經文「如是我聞。一時，佛在舍衛國祇樹給孤獨園，與大比丘眾千二百五十人俱」屬於：", options: ["發起序", "證信序", "別序", "正宗分"], ans: 2, exp: "具足六成就（信、聞、時、主、處、眾）者稱為「證信序」（通序）。" },
-            { id: 54, type: "MC", category: "第二部分：單選題", q: "「如是」作為「信順之詞」，是指哪一位尊者信順釋迦牟尼佛所說而結集經藏？", options: ["須菩提尊者", "大迦葉尊者", "阿難尊者", "舍利弗尊者"], ans: 3, exp: "指阿難尊者信順佛法，遵佛囑於結集經藏時唱「如是我聞」。" },
-            { id: 55, type: "MC", category: "第二部分：單選題", q: "作為「顯理之詞」，「如是」總顯真如實相妙理，此處具體顯現了什麼理？", options: ["三般若之理", "四聖諦之理", "十二因緣之理", "五蘊皆空之理"], ans: 1, exp: "顯示實相、觀照、文字三般若不二之妙理。" },
-            { id: 56, type: "MC", category: "第二部分：單選題", q: "「如是我聞」中的「如」，是指哪兩種般若理智如如、不二？", options: ["觀照般若與實相般若", "文字般若與實相般若", "方便般若與觀照般若", "境界般若與文字般若"], ans: 1, exp: "「如」者，觀照般若與實相般若契合無二。" },
-            { id: 57, type: "MC", category: "第二部分：單選題", q: "「如是」中的「是」者「無非」，對應的是三般若中的哪一種？", options: ["實相般若", "觀照般若", "文字般若", "離相般若"], ans: 3, exp: "「是」字無非，指文字般若能詮真實。" },
-            { id: 58, type: "MC", category: "第二部分：單選題", q: "有關「如是我聞」，下列何者錯誤？", options: ["如是我聞，是世尊回答大迦葉尊者之問", "阿難相好，陞座眾疑：疑釋迦佛再來？疑阿難成佛？疑他方佛來？至阿難高唱「如是我聞」，乃知阿難是承佛加被，頓息眾疑", "集結經典時，阿難云如是之法，乃我從佛所聞，言非自作，故息爭論", "如是我聞建立之因，是遵照、秉承佛陀的付囑"], ans: 1, exp: "【選項1錯誤】「如是我聞」是世尊臨涅槃時回答「阿難尊者」之問（阿難四問），非回答大迦葉尊者。" },
-            { id: 59, type: "MC", category: "第二部分：單選題", q: "始覺智慧是由本覺理體啟發出來的，始覺智合乎本覺理、如如不動，稱為「如」。其中「始覺智慧」是指：", options: ["實相般若", "觀照般若", "文字般若", "方便般若"], ans: 2, exp: "始覺智慧即是能照之「觀照般若」。" },
-            { id: 60, type: "MC", category: "第二部分：單選題", q: "從發起序中，世尊略示著衣、持鉢、乞食、飯食、收衣鉢、洗足、敷座而坐七事，是告訴我們？", options: ["前六屬戒，後一屬定；今欲談般若深慧，即慧之戒定故，為起慧之正因", "要發趣大乘，學深般若（理），不可輕忽一切毘尼細行（事），日用修行全事即理", "一舉一動顯發般若真心全體大用", "以上皆是"], ans: 4, exp: "選項1、2、3皆為發起序世尊示現日常七事之深廣意涵。" },
-            { id: 61, type: "MC", category: "第二部分：單選題", q: "經典當中為什麼都講「一時」，而不說一個具體的時間？", options: ["諸方時分，延促不同，華夏印度、天上人間、法會前後際……時間長短都不一樣，故但言一時", "說聽始終，師資道合、機教相當之時，「當下」很難具體標明哪個時間", "心境泯、理智融、凡聖如、始本會……此諸「二法皆一」之時，稱一時", "以上皆是"], ans: 4, exp: "「一時」涵蓋感應道交時、時分異同時、理智泯合時，故選項4為正確答案。" },
-            { id: 62, type: "MC", category: "第二部分：單選題", q: "世尊在城中乞食的方式是「次第乞已」，這展現了佛陀何種平等心？", options: ["擇富不擇貧", "擇貧不擇富", "不擇貧富、平等慈悲", "隨意遊行"], ans: 3, exp: "「次第乞已」即是不避貧富、挨家挨戶平等乞食，展現無差別之大慈悲心。" },
-            { id: 63, type: "MC", category: "第二部分：單選題", q: "發起序中「一切毘尼皆佛行」，其中的「毘尼」是指：", options: ["戒律與威儀細行", "神通變化", "講經說法", "梵唄唱誦"], ans: 1, exp: "毘尼（Vinaya）即律儀、戒律與日常生活威儀細行。" },
-            { id: 64, type: "MC", category: "第二部分：單選題", q: "《金剛經破空論》云「一一行中見實相」，說明佛陀在第一分中：", options: ["透過穿衣喫飯等日常生活展現實相妙理", "透過大顯神通展現實相", "透過嚴厲訶責展現實相", "透過隱居深山展現實相"], ans: 1, exp: "蕅益大師於《破空論》讚歎佛陀穿衣喫飯一一行中無非實相真如。" },
-            { id: 65, type: "MC", category: "第二部分：單選題", q: "發起序中「護念付囑善應知」，說明佛陀：", options: ["以口頭語言正式宣付遺教", "以身教細行默默護念付囑大眾", "交付衣鉢給特定弟子", "囑咐弟子建造佛塔"], ans: 2, exp: "說明佛陀以日常生活身教細行，默默護念付囑般若會上諸大眾。" }
-        ];
-
-        // APP STATE MANAGEMENT
-        class QuizApp {
-            constructor() {
-                this.selectedCategory = 'ALL'; // ALL, TF, MC
-                this.currentMode = 'SEQUENTIAL'; // SEQUENTIAL, RANDOM, WRONG
-                this.activeQuestions = [];
-                this.currentIndex = 0;
-                
-                // Track user answers: { questionObj, userAnswer, isCorrect }
-                this.quizResults = [];
-                this.wrongQuestionIds = new Set(JSON.parse(localStorage.getItem('diamond_quiz_wrong_ids') || '[]'));
-                
-                this.init();
-            }
-
-            init() {
-                this.updateWrongCountUI();
-                this.setupKeyboardShortcuts();
-                
-                // Theme detection
-                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                    document.getElementById('theme-toggle-dark-icon').classList.add('hidden');
-                    document.getElementById('theme-toggle-light-icon').classList.remove('hidden');
-                }
-            }
-
-            toggleTheme() {
-                const darkIcon = document.getElementById('theme-toggle-dark-icon');
-                const lightIcon = document.getElementById('theme-toggle-light-icon');
-                
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                    darkIcon.classList.remove('hidden');
-                    lightIcon.classList.add('hidden');
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                    darkIcon.classList.add('hidden');
-                    lightIcon.classList.remove('hidden');
-                }
-            }
-
-            setCategory(cat) {
-                this.selectedCategory = cat;
-                document.querySelectorAll('.cat-btn').forEach(btn => {
-                    btn.classList.remove('border-amber-600', 'bg-amber-50', 'dark:bg-stone-700', 'text-amber-900', 'dark:text-amber-200');
-                    btn.classList.add('border-stone-200', 'dark:border-stone-700', 'bg-stone-50', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-300');
-                });
-                
-                const activeBtn = document.getElementById(`cat-btn-${cat}`);
-                if (activeBtn) {
-                    activeBtn.classList.remove('border-stone-200', 'dark:border-stone-700', 'bg-stone-50', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-300');
-                    activeBtn.classList.add('border-amber-600', 'bg-amber-50', 'dark:bg-stone-700', 'text-amber-900', 'dark:text-amber-200');
-                }
-            }
-
-            startQuiz(mode) {
-                this.currentMode = mode;
-                
-                // Filter by category
-                let list = RAW_QUESTIONS.filter(q => {
-                    if (this.selectedCategory === 'TF') return q.type === 'TF';
-                    if (this.selectedCategory === 'MC') return q.type === 'MC';
-                    return true;
-                });
-
-                // Filter by mode
-                if (mode === 'WRONG') {
-                    if (this.wrongQuestionIds.size === 0) {
-                        alert('目前錯題庫中沒有題目喔！請先進行測驗。');
-                        return;
-                    }
-                    list = list.filter(q => this.wrongQuestionIds.has(q.id));
-                    if (list.length === 0) {
-                        alert('目前選定的分類中沒有錯題紀錄！');
-                        return;
-                    }
-                } else if (mode === 'RANDOM') {
-                    list = [...list].sort(() => Math.random() - 0.5);
-                }
-
-                this.activeQuestions = list;
-                this.currentIndex = 0;
-                this.quizResults = [];
-
-                // Update UI Badges
-                document.getElementById('quiz-mode-badge').innerText = 
-                    mode === 'SEQUENTIAL' ? '順序練習' : (mode === 'RANDOM' ? '隨機抽題' : '錯題複習');
-                
-                document.getElementById('quiz-category-badge').innerText = 
-                    this.selectedCategory === 'ALL' ? '全部題庫 (65題)' : (this.selectedCategory === 'TF' ? '是非題 (30題)' : '單選題 (35題)');
-
-                // Switch Screens
-                this.showScreen('quiz');
-                this.renderQuestion();
-            }
-
-            startReviewMode() {
-                this.setCategory('ALL');
-                this.startQuiz('WRONG');
-            }
-
-            renderQuestion() {
-                const q = this.activeQuestions[this.currentIndex];
-                const total = this.activeQuestions.length;
-
-                // Update headers & progress
-                document.getElementById('question-type-tag').innerText = q.category;
-                document.getElementById('question-orig-num').innerText = `原題號 #${q.id}`;
-                document.getElementById('question-text').innerText = `${this.currentIndex + 1}. ${q.q}`;
-
-                document.getElementById('quiz-progress-text').innerText = `${this.currentIndex + 1} / ${total}`;
-                document.getElementById('quiz-progress-bar').style.width = `${((this.currentIndex) / total) * 100}%`;
-
-                // Calculate current score counter
-                const correctCount = this.quizResults.filter(r => r.isCorrect).length;
-                const wrongCount = this.quizResults.filter(r => !r.isCorrect).length;
-                document.getElementById('quiz-score-correct').innerText = correctCount;
-                document.getElementById('quiz-score-wrong').innerText = wrongCount;
-
-                // Reset explanation panel
-                const expPanel = document.getElementById('explanation-panel');
-                expPanel.classList.add('hidden');
-
-                // Reset Next Button
-                const btnNext = document.getElementById('btn-next');
-                btnNext.disabled = true;
-
-                // Render Options
-                const container = document.getElementById('options-container');
-                container.innerHTML = '';
-
-                const existingResult = this.quizResults[this.currentIndex];
-
-                if (q.type === 'TF') {
-                    // True / False options
-                    const tfOptions = [
-                        { label: '○ 正確 (True)', val: 'O', key: 'T' },
-                        { label: '✕ 錯誤 (False)', val: 'X', key: 'F' }
-                    ];
-
-                    tfOptions.forEach(opt => {
-                        const btn = document.createElement('button');
-                        btn.className = `w-full text-left p-4 rounded-xl border-2 font-medium transition flex justify-between items-center bg-stone-50 dark:bg-stone-700/50 border-stone-200 dark:border-stone-600 hover:border-amber-500 text-stone-800 dark:text-stone-100 option-btn`;
-                        btn.dataset.val = opt.val;
-                        btn.innerHTML = `
-                            <span class="text-base font-semibold">${opt.label}</span>
-                            <span class="text-xs bg-stone-200 dark:bg-stone-600 px-2 py-1 rounded text-stone-600 dark:text-stone-300 font-mono">${opt.key}</span>
-                        `;
-                        btn.onclick = () => this.handleAnswer(opt.val);
-                        container.appendChild(btn);
-                    });
-                } else {
-                    // Multiple Choice options 1..4
-                    q.options.forEach((optText, idx) => {
-                        const numVal = idx + 1;
-                        const btn = document.createElement('button');
-                        btn.className = `w-full text-left p-4 rounded-xl border-2 font-medium transition flex items-start space-x-3 bg-stone-50 dark:bg-stone-700/50 border-stone-200 dark:border-stone-600 hover:border-amber-500 text-stone-800 dark:text-stone-100 option-btn`;
-                        btn.dataset.val = numVal;
-                        btn.innerHTML = `
-                            <span class="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-600 text-stone-700 dark:text-stone-200 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5 font-mono">${numVal}</span>
-                            <span class="text-base leading-snug flex-grow">${optText}</span>
-                        `;
-                        btn.onclick = () => this.handleAnswer(numVal);
-                        container.appendChild(btn);
-                    });
-                }
-
-                // If user has already answered this question in current session (e.g., navigated back)
-                if (existingResult) {
-                    this.showFeedbackUI(existingResult.userAnswer);
-                }
-            }
-
-            handleAnswer(selectedVal) {
-                const q = this.activeQuestions[this.currentIndex];
-                const isCorrect = String(selectedVal) === String(q.ans);
-
-                // Save or update result
-                this.quizResults[this.currentIndex] = {
-                    question: q,
-                    userAnswer: selectedVal,
-                    isCorrect: isCorrect
-                };
-
-                // Track global wrong list in local storage
-                if (!isCorrect) {
-                    this.wrongQuestionIds.add(q.id);
-                } else {
-                    // If user was practicing wrong questions and got it right, remove from wrong pool
-                    if (this.currentMode === 'WRONG') {
-                        this.wrongQuestionIds.delete(q.id);
-                    }
-                }
-                this.saveWrongIds();
-
-                // UI Feedback
-                this.showFeedbackUI(selectedVal);
-            }
-
-            showFeedbackUI(selectedVal) {
-                const q = this.activeQuestions[this.currentIndex];
-                const isCorrect = String(selectedVal) === String(q.ans);
-
-                // Disable all option buttons & highlight
-                const optionBtns = document.querySelectorAll('.option-btn');
-                optionBtns.forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.remove('hover:border-amber-500');
-
-                    const btnVal = btn.dataset.val;
-                    if (String(btnVal) === String(q.ans)) {
-                        // Correct option -> Green
-                        btn.classList.remove('bg-stone-50', 'dark:bg-stone-700/50', 'border-stone-200', 'dark:border-stone-600');
-                        btn.classList.add('bg-emerald-50', 'dark:bg-emerald-950/40', 'border-emerald-500', 'text-emerald-900', 'dark:text-emerald-200');
-                    }
-                    
-                    if (String(btnVal) === String(selectedVal) && !isCorrect) {
-                        // Incorrectly selected option -> Red
-                        btn.classList.remove('bg-stone-50', 'dark:bg-stone-700/50', 'border-stone-200', 'dark:border-stone-600');
-                        btn.classList.add('bg-red-50', 'dark:bg-red-950/40', 'border-red-500', 'text-red-900', 'dark:text-red-200');
-                    }
-                });
-
-                // Show Explanation Panel
-                const expPanel = document.getElementById('explanation-panel');
-                const expTitle = document.getElementById('explanation-title');
-                const expText = document.getElementById('explanation-text');
-
-                expPanel.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'bg-red-50', 'border-red-200', 'dark:bg-emerald-950/30', 'dark:border-emerald-800', 'dark:bg-red-950/30', 'dark:border-red-800');
-
-                if (isCorrect) {
-                    expPanel.classList.add('bg-emerald-50', 'border-emerald-200', 'dark:bg-emerald-950/30', 'dark:border-emerald-800');
-                    expTitle.className = 'flex items-center space-x-2 font-bold text-base text-emerald-800 dark:text-emerald-300';
-                    expTitle.innerHTML = `<i class="fa-solid fa-circle-check text-xl"></i><span>回答正確！</span>`;
-                } else {
-                    expPanel.classList.add('bg-red-50', 'border-red-200', 'dark:bg-red-950/30', 'dark:border-red-800');
-                    expTitle.className = 'flex items-center space-x-2 font-bold text-base text-red-800 dark:text-red-300';
-                    const correctDisplay = q.type === 'TF' ? (q.ans === 'O' ? '正確 (O)' : '錯誤 (X)') : `選項 (${q.ans})`;
-                    expTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-xl"></i><span>回答錯誤！正確答案為：${correctDisplay}</span>`;
-                }
-
-                expText.innerText = q.exp || '尚無額外註解。';
-
-                // Enable Next Question button
-                const btnNext = document.getElementById('btn-next');
-                btnNext.disabled = false;
-            }
-
-            nextQuestion() {
-                if (this.currentIndex < this.activeQuestions.length - 1) {
-                    this.currentIndex++;
-                    this.renderQuestion();
-                } else {
-                    this.finishQuiz();
-                }
-            }
-
-            prevQuestion() {
-                if (this.currentIndex > 0) {
-                    this.currentIndex--;
-                    this.renderQuestion();
-                }
-            }
-
-            finishQuiz() {
-                // Calculate final summary statistics
-                const total = this.activeQuestions.length;
-                const correctCount = this.quizResults.filter(r => r && r.isCorrect).length;
-                const wrongCount = total - correctCount;
-                const accuracy = Math.round((correctCount / total) * 100) || 0;
-
-                document.getElementById('sum-total-count').innerText = total;
-                document.getElementById('sum-correct-count').innerText = correctCount;
-                document.getElementById('sum-wrong-count').innerText = wrongCount;
-                document.getElementById('sum-accuracy').innerText = `${accuracy}%`;
-
-                // Render wrong questions review list
-                const wrongListContainer = document.getElementById('summary-wrong-list');
-                const wrongSection = document.getElementById('summary-wrong-section');
-                wrongListContainer.innerHTML = '';
-
-                const wrongResults = this.quizResults.filter(r => r && !r.isCorrect);
-
-                if (wrongResults.length === 0) {
-                    wrongSection.classList.add('hidden');
-                } else {
-                    wrongSection.classList.remove('hidden');
-                    wrongResults.forEach((res, idx) => {
-                        const q = res.question;
-                        const card = document.createElement('div');
-                        card.className = 'p-4 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/40 dark:bg-stone-800 space-y-2';
-                        
-                        let answerDisplay = '';
-                        if (q.type === 'TF') {
-                            answerDisplay = `正確答案：<b>${q.ans === 'O' ? '○ 正確' : '✕ 錯誤'}</b>（您選擇了：${res.userAnswer === 'O' ? '○ 正確' : '✕ 錯誤'}）`;
-                        } else {
-                            answerDisplay = `正確答案：<b>選項 (${q.ans}) ${q.options[q.ans - 1]}</b><br><span class="text-xs text-red-600 dark:text-red-400">您的選擇：選項 (${res.userAnswer}) ${q.options[res.userAnswer - 1]}</span>`;
-                        }
-
-                        card.innerHTML = `
-                            <div class="flex justify-between items-start text-xs text-stone-500 dark:text-stone-400">
-                                <span class="font-bold text-red-700 dark:text-red-400">錯題 #${idx + 1} (原題號 #${q.id})</span>
-                                <span>${q.category}</span>
-                            </div>
-                            <div class="font-bold text-stone-800 dark:text-stone-100 text-sm md:text-base">${q.q}</div>
-                            <div class="text-xs text-stone-700 dark:text-stone-300 bg-white dark:bg-stone-700/60 p-2.5 rounded-lg border border-stone-200 dark:border-stone-600">${answerDisplay}</div>
-                            <div class="text-xs text-stone-600 dark:text-stone-400 pt-1"><b>解析：</b>${q.exp}</div>
-                        `;
-                        wrongListContainer.appendChild(card);
-                    });
-                }
-
-                this.showScreen('summary');
-            }
-
-            restartSameQuiz() {
-                this.startQuiz(this.currentMode);
-            }
-
-            confirmExitQuiz() {
-                if (confirm('確定要離開本次測驗返回主選單嗎？')) {
-                    this.showHome();
-                }
-            }
-
-            showHome() {
-                this.updateWrongCountUI();
-                this.showScreen('home');
-            }
-
-            showScreen(screenId) {
-                document.getElementById('screen-home').classList.add('hidden');
-                document.getElementById('screen-quiz').classList.add('hidden');
-                document.getElementById('screen-summary').classList.add('hidden');
-
-                document.getElementById(`screen-${screenId}`).classList.remove('hidden');
-            }
-
-            saveWrongIds() {
-                localStorage.setItem('diamond_quiz_wrong_ids', JSON.stringify(Array.from(this.wrongQuestionIds)));
-                this.updateWrongCountUI();
-            }
-
-            updateWrongCountUI() {
-                const count = this.wrongQuestionIds.size;
-                document.getElementById('global-wrong-count').innerText = count;
-                
-                const btn = document.getElementById('wrong-count-btn');
-                const cardDesc = document.getElementById('wrong-card-desc');
-                
-                if (count > 0) {
-                    btn.classList.remove('hidden');
-                    cardDesc.innerText = `錯題庫現有 ${count} 題，點擊進行針對性複習。`;
-                } else {
-                    btn.classList.add('hidden');
-                    cardDesc.innerText = `目前尚無錯題紀錄。`;
-                }
-            }
-
-            setupKeyboardShortcuts() {
-                document.addEventListener('keydown', (e) => {
-                    // Only active on quiz screen
-                    if (document.getElementById('screen-quiz').classList.contains('hidden')) return;
-
-                    const q = this.activeQuestions[this.currentIndex];
-                    const btnNext = document.getElementById('btn-next');
-
-                    // If question answered and space/enter pressed -> Next Question
-                    if (!btnNext.disabled && (e.code === 'Space' || e.code === 'Enter')) {
-                        e.preventDefault();
-                        this.nextQuestion();
-                        return;
-                    }
-
-                    // If question not answered yet:
-                    const existing = this.quizResults[this.currentIndex];
-                    if (existing) return; // already answered
-
-                    if (q.type === 'TF') {
-                        if (e.key.toLowerCase() === 't' || e.key === '1') {
-                            this.handleAnswer('O');
-                        } else if (e.key.toLowerCase() === 'f' || e.key === '2') {
-                            this.handleAnswer('X');
-                        }
-                    } else if (q.type === 'MC') {
-                        if (['1', '2', '3', '4'].includes(e.key)) {
-                            this.handleAnswer(parseInt(e.key));
-                        }
-                    }
-                });
-            }
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-amber-800 dark:group-hover:text-amber-400 transition">
+              ${topic.title}
+            </h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+              ${topic.description}
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs text-amber-700 dark:text-amber-400 font-semibold">
+            <span>開始答題</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function showTopicSelection() {
+      document.getElementById('view-topic-select').classList.remove('hidden');
+      document.getElementById('view-quiz').classList.add('hidden');
+      document.getElementById('btn-back-topics').classList.add('hidden');
+      document.getElementById('current-topic-badge').innerText = "線上題庫練習系統";
+    }
+
+    function startTopic(index) {
+      currentTopicIndex = index;
+      const topic = topicsData[index];
+      
+      rawQuestions = topic.questions;
+      userAnswers = {};
+      wrongQuestionIds.clear();
+      currentFilter = 'all';
+      isRandom = false;
+
+      document.getElementById('active-topic-title').innerText = topic.title;
+      document.getElementById('current-topic-badge').innerText = topic.title;
+      document.getElementById('btn-back-topics').classList.remove('hidden');
+
+      document.getElementById('view-topic-select').classList.add('hidden');
+      document.getElementById('view-quiz').classList.remove('hidden');
+
+      applyFilterAndRender();
+    }
+
+    // ==========================================
+    // 篩選與測驗邏輯
+    // ==========================================
+    function applyFilterAndRender() {
+      let list = [...rawQuestions];
+
+      if (currentFilter === 'tf') {
+        list = list.filter(q => q.type === 'tf');
+      } else if (currentFilter === 'choice') {
+        list = list.filter(q => q.type === 'choice');
+      } else if (currentFilter === 'wrong') {
+        list = list.filter(q => wrongQuestionIds.has(q.id));
+      }
+
+      if (isRandom) {
+        list.sort(() => Math.random() - 0.5);
+      }
+
+      filteredQuestions = list;
+      currentIndex = 0;
+
+      updateFilterButtonsUI();
+      renderQuestion();
+    }
+
+    function setFilter(filterType) {
+      if (filterType === 'wrong' && wrongQuestionIds.size === 0) {
+        alert("目前還沒有錯題記錄喔！繼續加油！");
+        return;
+      }
+      currentFilter = filterType;
+      applyFilterAndRender();
+    }
+
+    function toggleRandomMode() {
+      isRandom = !isRandom;
+      const btn = document.getElementById('btn-random-mode');
+      if (isRandom) {
+        btn.classList.add('active-filter');
+      } else {
+        btn.classList.remove('active-filter');
+      }
+      applyFilterAndRender();
+    }
+
+    function updateFilterButtonsUI() {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+      document.getElementById(`btn-filter-${currentFilter}`).classList.add('active-filter');
+      document.getElementById('wrong-count').innerText = wrongQuestionIds.size;
+    }
+
+    function renderQuestion() {
+      const container = document.getElementById('options-container');
+      const expBox = document.getElementById('explanation-box');
+      
+      if (filteredQuestions.length === 0) {
+        document.getElementById('question-category').innerText = "無題目";
+        document.getElementById('question-number').innerText = "";
+        document.getElementById('question-text').innerText = "該篩選條件下無任何題目。";
+        container.innerHTML = "";
+        expBox.classList.add('hidden');
+        updateStats();
+        return;
+      }
+
+      const q = filteredQuestions[currentIndex];
+
+      document.getElementById('question-category').innerText = q.category || "題目";
+      document.getElementById('question-number').innerText = `${currentIndex + 1} / ${filteredQuestions.length}`;
+      document.getElementById('question-text').innerText = q.question;
+
+      container.innerHTML = "";
+
+      const answered = userAnswers.hasOwnProperty(q.id);
+      const selectedOption = userAnswers[q.id];
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-3.5 rounded-lg border text-sm font-medium transition-all flex items-start space-x-3 ";
+
+        if (!answered) {
+          btn.className += "border-slate-200 dark:border-slate-700 hover:bg-amber-50/60 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200";
+          btn.onclick = () => selectOption(q.id, optIdx);
+        } else {
+          btn.disabled = true;
+          if (optIdx === q.answer) {
+            btn.className += "border-emerald-500 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 font-bold";
+          } else if (optIdx === selectedOption && selectedOption !== q.answer) {
+            btn.className += "border-rose-500 bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-300";
+          } else {
+            btn.className += "border-slate-100 dark:border-slate-800 opacity-50 text-slate-500 dark:text-slate-400";
+          }
         }
 
-        // Initialize App on DOM Load
-        let app;
-        window.addEventListener('DOMContentLoaded', () => {
-            app = new QuizApp();
-        });
-    </script>
+        btn.innerHTML = `
+          <span class="inline-block mt-0.5">${optText}</span>
+        `;
+        container.appendChild(btn);
+      });
+
+      // 解析顯示
+      if (answered) {
+        expBox.classList.remove('hidden');
+        const isCorrect = selectedOption === q.answer;
+        const statusEl = document.getElementById('result-status');
+        
+        if (isCorrect) {
+          statusEl.className = "flex items-center space-x-2 font-bold text-sm text-emerald-600 dark:text-emerald-400";
+          statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>回答正確！</span>`;
+        } else {
+          statusEl.className = "flex items-center space-x-2 font-bold text-sm text-rose-600 dark:text-rose-400";
+          statusEl.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span>回答錯誤！正確答案為：${q.options[q.answer]}</span>`;
+        }
+
+        document.getElementById('explanation-text').innerText = q.explanation ? `【解析與說明】${q.explanation}` : "暫無額外解析。";
+      } else {
+        expBox.classList.add('hidden');
+      }
+
+      // 控制按鈕狀態
+      document.getElementById('btn-prev').disabled = currentIndex === 0;
+      document.getElementById('btn-next').disabled = currentIndex === filteredQuestions.length - 1;
+
+      updateStats();
+    }
+
+    function selectOption(qId, optIdx) {
+      userAnswers[qId] = optIdx;
+      const q = rawQuestions.find(item => item.id === qId);
+
+      if (optIdx !== q.answer) {
+        wrongQuestionIds.add(qId);
+      } else {
+        wrongQuestionIds.delete(qId);
+      }
+
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentIndex < filteredQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      }
+    }
+
+    function updateStats() {
+      let correct = 0;
+      let wrong = 0;
+
+      rawQuestions.forEach(q => {
+        if (userAnswers.hasOwnProperty(q.id)) {
+          if (userAnswers[q.id] === q.answer) correct++;
+          else wrong++;
+        }
+      });
+
+      document.getElementById('score-correct').innerText = correct;
+      document.getElementById('score-wrong').innerText = wrong;
+      document.getElementById('stat-count').innerText = `${filteredQuestions.length} 題`;
+      document.getElementById('wrong-count').innerText = wrongQuestionIds.size;
+
+      // 進度條
+      const total = filteredQuestions.length;
+      const progress = total > 0 ? ((currentIndex + 1) / total) * 100 : 0;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      const icon = document.getElementById('theme-icon');
+      if (document.documentElement.classList.contains('dark')) {
+        icon.className = 'fa-solid fa-sun';
+      } else {
+        icon.className = 'fa-solid fa-moon';
+      }
+    }
+  </script>
 </body>
 </html>
